@@ -1,0 +1,11 @@
+/* MapContainer.module.css */
+.mapContainer {
+  height: 100%; /* Ensure the map takes the full height of its container */
+  width: 100%;  /* Ensure the map takes the full width of its container */
+  min-height: 650px; /* Add a minimum height to ensure the map is visible */
+  position: relative;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  overflow: hidden;
+}

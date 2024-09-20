@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import TopNavbar from "../components/TopNavbar/TopNavbar"; // Import TopNavbar
+import SideNavbar from "../components/SideNavbar/SideNavbar"; // Import SideNavbar
 import "./globals.css";
 
 const geistSans = localFont({
@@ -7,6 +9,7 @@ const geistSans = localFont({
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -28,7 +31,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <TopNavbar /> 
+        <SideNavbar /> 
+        <div className="content"> {/* Wrapper for page-specific content */}
+          {children} {/* This renders the content of each page */}
+        </div>
       </body>
     </html>
   );

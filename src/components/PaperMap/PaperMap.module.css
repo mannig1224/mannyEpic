@@ -1,0 +1,8 @@
+/* Ensure the canvas takes up the full width and height of its parent container */
+.canvas {
+    width: 800px;  /* Set explicit width */
+    height: 600px; /* Set explicit height */
+    border: 1px solid black; /* Add a border to ensure visibility */
+    background-color: #f0f0f0; /* Light background color */
+  }
+  

@@ -1,0 +1,17 @@
+/* TopNavbar.module.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    color: #333;
+    padding: 0 2rem;
+    height: 75px;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    left: 85px;
+    width: calc(100% - 85px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  }
+  

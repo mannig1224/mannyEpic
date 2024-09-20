@@ -1,0 +1,123 @@
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  padding: 0.5rem 1rem;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  border-radius: 50%;
+}
+
+.iconHover {
+  background-color: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+.icon {
+  color: #333;
+}
+
+.greenIcon {
+  color: rgb(25, 174, 25); /* Ensure this is set to apply green to your phone icon */
+}
+
+.stopButtonContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-radius: 8px;
+}
+
+.stopButtonHover {
+  background-color: rgba(255, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.stopButton {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.stopIcon {
+  width: 24px;
+  height: 24px;
+  background-color: rgb(255, 107, 107);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stopSquare {
+  width: 8px;
+  height: 8px;
+  background-color: white;
+}
+
+.stopText {
+  color: #333;
+  font-weight: bold;
+  font-size: 0.8rem;
+  opacity: 0;
+  transform: translateY(-20px) translateX(-50%);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  visibility: hidden;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.stopButtonContainer:hover .stopText {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0) translateX(-50%);
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.profileContainer:hover {
+  transform: translateY(-5px) scale(1.1);
+  background-color: rgba(0, 0, 255, 0.1);
+}
+
+.userIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #add8e6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.profileContainer:hover .userIcon {
+  background-color: #87ceeb;
+}
+
+.userName {
+  margin-left: 8px;
+  color: #333;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.profileContainer:hover .userName {
+  color: #007bff;
+}

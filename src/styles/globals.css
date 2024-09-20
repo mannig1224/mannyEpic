@@ -1,0 +1,9 @@
+/* styles/globals.css */
+
+html, body, #__next {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9; /* Light background for the whole content area */
+  }
+  

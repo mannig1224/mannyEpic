@@ -1,0 +1,27 @@
+.profileSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .profileDetails {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .username {
+    font-weight: bold;
+  }
+  
+  .timestamp {
+    font-size: 0.8rem;
+    color: #999;
+  }
+  
