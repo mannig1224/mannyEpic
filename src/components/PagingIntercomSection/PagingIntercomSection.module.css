@@ -1,0 +1,158 @@
+/* Container for the paging/intercom section */
+.pagingIntercomContainer {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 0 0 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Adjust width as needed */
+  }
+  
+  /* Wrapper for search input and icon */
+  .searchWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Styling for the search input */
+  .searchInput {
+    padding: 10px 40px 10px 10px; /* Space for the search icon */
+    border: none;
+    border-bottom: 1px solid #ddd; /* Bottom border */
+    font-size: 16px;
+    color: #aaa;
+    outline: none;
+    width: 100%;
+    background-color: transparent;
+  }
+  
+  /* Search icon styling */
+  .searchIcon {
+    position: absolute;
+    right: 10px; /* Position the icon inside the input box */
+    color: #aaa; /* Match the icon color with the input placeholder color */
+    font-size: 18px;
+  }
+  
+  /* Container for the room/zone selection */
+  .selectionContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Label for the dropdown */
+  .selectLabel {
+    font-size: 14px;
+    color: #666; /* Subtle gray text color */
+    margin-bottom: 5px;
+  }
+  
+  /* Styling for the dropdown */
+  .roomSelect {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f8f9fa; /* Light background similar to image */
+    color: #555;
+    appearance: none; /* Remove the default dropdown arrow */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="292.4" height="292.4" viewBox="0 0 292.4 292.4"><path fill="%23666" d="M287 69.2c7.6-7.6 7.6-19.9 0-27.5L263.7 18.4c-7.6-7.6-19.9-7.6-27.5 0L146.2 108.4 55.1 18.4C47.5 10.8 35.2 10.8 27.5 18.4L5.1 41.7c-7.6 7.6-7.6 19.9 0 27.5L134.9 198.9c7.6 7.6 19.9 7.6 27.5 0L287 69.2z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  /* Scrollable list container for rooms/zones */
+  .scrollableList {
+    height: 300px; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable scrolling if the list exceeds the max height */
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  /* Styling for each list item (room/zone) */
+  .listItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f0f4fb;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #333;
+    transition: background-color 0.2s ease;
+  }
+  
+  /* Hover effect for list items */
+  .listItem:hover {
+    background-color: #e3ebf6;
+  }
+  
+  /* Styling for the selected list item */
+  .selected {
+    background-color: #e0ebf8; /* Light blue background for selected item */
+  }
+  
+  /* Check icon styling */
+  .checkIcon {
+    color: #0066cc; /* Blue color for the checkmark */
+    font-size: 20px;
+  }
+  
+  /* Styling when no items are found */
+  .noItems {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  /* Button container for clear and paging buttons */
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Add a small gap between the buttons */
+    margin-top: 20px;
+  }
+  
+  /* Clear selection button styling */
+  .clearButton {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+  }
+  
+  /* Start paging button styling */
+  .pagingButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #0066cc;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+  }
+  
+  .clearButton:hover {
+    background-color: #f0f4fb;
+  }
+  
+  .pagingButton:hover {
+    background-color: #004c99;
+  }

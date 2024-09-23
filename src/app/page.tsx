@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
-import MapSection from '../components/MapSection/MapSection'; // Import MapSection
+import HomeLeftSection from '../components/HomeLeftSection/HomeLeftSection'; // No need for .tsx extension
+import HomeRightSection from '../components/HomeRightSection/HomeRightSection'; // No need for .tsx extension
 import styles from '../styles/Home.module.css';
 
 const Home: React.FC = () => {
@@ -12,11 +13,10 @@ const Home: React.FC = () => {
 
   return (
     <main className={styles.mainContent}>
-      <MapSection currentMap={currentMap} onMapChange={handleMapChange} /> {/* Pass state to MapSection */}
-
-      <div className={styles.plainSection}>
-        <p>This is the second div with some content.</p>
-      </div>
+      <HomeLeftSection currentMap={currentMap} onMapChange={handleMapChange} /> {/* Pass state to MapSection */}
+      
+      <HomeRightSection />
+      
     </main>
   );
 };

@@ -1,18 +1,21 @@
 import React from 'react';
-import dynamic from 'next/dynamic';
-
-// Dynamically import the PaperMap component to prevent SSR issues
-const PaperMap = dynamic(() => import('../PaperMap/PaperMap'), { ssr: false });
-
+import dynamic from 'next/dynamic'; // For dynamic imports, useful when integrating third-party libraries like Konva.js
+import styles from './MapContainer.module.css';
+// Define the props interface for the MapContainer component
 interface MapContainerProps {
-  currentMap: string; // Map name passed from the parent component
+  currentMap: string; // The name of the current map passed from the parent component
 }
+
+// Dynamically import the KonvaMap component (client-side only)
+const KonvaMap = dynamic<MapContainerProps>(() => import('../KonvaMap/KonvaMap'), { ssr: false });
+
+
 
 const MapContainer: React.FC<MapContainerProps> = ({ currentMap }) => {
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      {/* Render PaperMap component (only on the client-side) */}
-      <PaperMap currentMap={currentMap} />
+    <div className={styles.mapContainer}>
+      <KonvaMap currentMap={currentMap} /> 
+      {/* KonvaMap component dynamically loaded and passed the current map */}
     </div>
   );
 };

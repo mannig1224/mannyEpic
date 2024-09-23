@@ -1,0 +1,7 @@
+/* KonvaMap.module.css */
+.konvaMap {
+    height: 100%; /* Inherit the full height of the parent */
+    width: 100%;  /* Inherit the full width of the parent */
+    position: relative; /* Required for internal absolute positioning */
+  }
+  

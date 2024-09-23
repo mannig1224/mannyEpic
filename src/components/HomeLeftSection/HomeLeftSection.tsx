@@ -1,16 +1,16 @@
 import React from 'react';
 import MapContainer from '../MapContainer/MapContainer';
-import styles from './MapSection.module.css';
+import styles from './HomeLeftSection.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
-interface MapSectionProps {
+interface HomeLeftSectionProps {
   currentMap: string;
   onMapChange: (newMap: string) => void;
 }
 
-const MapSection: React.FC<MapSectionProps> = ({ currentMap, onMapChange}) => {
-  const maps = ['Map1', 'Emmanuel Gatica', 'Map3']; // Example map names
+const HomeLeftSection: React.FC<HomeLeftSectionProps> = ({ currentMap, onMapChange}) => {
+  const maps = ['Map1', 'Map2', 'Map3']; // Example map names
 
   const handleMapChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onMapChange(event.target.value); // Call parent function to update state
@@ -37,9 +37,7 @@ const MapSection: React.FC<MapSectionProps> = ({ currentMap, onMapChange}) => {
         {/* Buttons for settings and page entire school */}
         <div className={styles.buttonContainer}>
           <button className={styles.pageButton}>Page Entire School</button>
-          <button className={styles.settingsIcon}>
-            <FontAwesomeIcon icon={faCog} size="sm" />
-          </button>
+          
         </div>
       </div>
 
@@ -49,4 +47,4 @@ const MapSection: React.FC<MapSectionProps> = ({ currentMap, onMapChange}) => {
   );
 };
 
-export default MapSection;
+export default HomeLeftSection;

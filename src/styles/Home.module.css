@@ -5,17 +5,9 @@
   padding: 2rem;
   display: flex;
   gap: 2rem; /* Gap between the map and the second section */
-  flex-grow: 1;
 }
 
 
 
-.plainSection {
-  flex-grow: 1;
-  background-color: #e0e0e0; /* Gray background */
-  border-radius: 8px; /* Rounded corners */
-  padding: 1.5rem;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  border: 1px solid #ccc; /* Light border */
-}
+
 

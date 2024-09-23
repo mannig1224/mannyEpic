@@ -1,10 +1,10 @@
 .mapSection {
     width: 100%; /* Allow the section to grow */
-    max-width: 1000px; /* Maximum width */
+    max-width: 1350px; /* Maximum width */
     min-width: 400px; /* Minimum width */
     
     height: 100%; /* Allow the section to grow */
-    max-height: 80vh; /* Maximum height */
+    max-height: 85vh; /* Maximum height */
     min-height: 300px; /* Minimum height */
     
     border-radius: 8px;
@@ -106,34 +106,4 @@
     transform: scale(1.05); /* Slightly enlarge button on hover */
 }
   
-  /* Styling for the Settings button */
-  .settingsButton {
-    padding: 0.5rem 1rem;
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-  }
   
-  .settingsButton:hover {
-    background-color: #e0e0e0;
-  }
-  
-  /* Styling for the Settings icon button */
-.settingsIcon {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #878787;
-    font-size: 1.5rem;
-    padding: 0.5rem;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .settingsIcon:hover {
-    background-color: #e0e0e0;
-  }
