@@ -12,7 +12,7 @@ interface KonvaMapProps {
 const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   const konvaMapRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<any>(null); // Reference to the stage for zooming
-  const [containerSize, setContainerSize] = useState({ width: 800, height: 600 }); // Default size
+  const [containerSize, setContainerSize] = useState({ width: 800, height: 750 }); // Default size
   console.log("Container Size for the Stage: ", containerSize);
   const mapImagePath = mapDatabase[currentMap];
   const [image] = useImage(mapImagePath);

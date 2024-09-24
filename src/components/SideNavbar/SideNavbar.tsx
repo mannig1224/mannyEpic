@@ -7,7 +7,7 @@ import NavItem from '../NavItem/NavItem'; // Import the NavItem component
 import styles from './SideNavbar.module.css'; // Import the CSS module
 
 const SideNavbar = () => {
-  const [activeItem, setActiveItem] = React.useState('Bell Schedule'); // Default active item
+  const [activeItem, setActiveItem] = React.useState('Home'); // Default active item
 
   return (
     <div className={styles.sidebar}>

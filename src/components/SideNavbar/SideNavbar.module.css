@@ -11,6 +11,7 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   padding: 0; /* Remove any padding that pushes the sidebar */
   margin: 0; /* Remove any margin */
+  z-index: 500;
 }
 
   

@@ -3,8 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #e52121;
   --foreground: #171717;
+  --primary-color-rgb: 246, 130, 32;
+  --primary-color: #f68220; /* Default hex for primary color */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,7 +18,7 @@
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background-color: rgba(var(--primary-color-rgb, 246, 130, 32), 0.06); /* Darker orange for active items */
   font-family: Arial, Helvetica, sans-serif;
 }
 
