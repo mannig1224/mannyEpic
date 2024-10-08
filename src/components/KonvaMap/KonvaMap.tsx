@@ -11,7 +11,7 @@ interface KonvaMapProps {
 
 const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   const konvaMapRef = useRef<HTMLDivElement | null>(null); // Reference to the map container div
-  const stageRef = useRef<typeof Stage>(null); // This will avoid the Konva namespace reference
+  const stageRef = useRef<Konva.Stage | null>(null);// Reference to the Konva stage for controlling zoom/drag
   const [containerSize, setContainerSize] = useState({ width: 1000, height: 800 }); // Track the size of the map container
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 }); // Track the position of the image (for centering)
   const [polygons, setPolygons] = useState<number[][][]>([]); // Store completed polygons as arrays of points
@@ -65,19 +65,11 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
    */
   const getRelativePointerPosition = () => {
     const stage = stageRef.current;
-  
-    // Add a check to ensure stage is not null
-    if (!stage) {
-      return { x: 0, y: 0 }; // Return default value if stage is null
-    }
-  
     const transform = stage.getAbsoluteTransform().copy();
     transform.invert(); // Invert the transformation matrix to get the original point
     const pos = stage.getPointerPosition(); // Get the pointer position in stage coordinates
-  
     return transform.point(pos); // Return the transformed point
   };
-  
 
   /**
    * Helper function to calculate the distance between two points.
@@ -130,8 +122,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
    * Handle adding points for drawing polygons.
    * Closes the shape if the last point is close enough to the first.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleMouseDown = () => {
+  const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     if (!drawMode || isHoveringPolygon) return; // Only allow drawing in draw mode and if not hovering over an existing polygon
 
     const pointerPosition = getRelativePointerPosition();
