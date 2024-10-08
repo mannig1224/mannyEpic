@@ -18,12 +18,12 @@ const DoorsSection: React.FC = () => {
   // Handle Edit Door (logic can be customized)
   const handleEditDoor = (door: string) => {
     alert(`Editing: ${door}`);
-    // You can implement your edit logic here (e.g., open a modal for editing)
+    // You can implement your edit logic here (e.g., open a modal for editing)a
   };
 
   // Handle Delete Door (logic can be customized)
   const handleDeleteDoor = (door: string) => {
-    if (window.confirm(`Are you sure you want to delete ${door}?`)) {
+    if (window.confirm(`Are you sure you want to deletea ${door}?`)) {
       // Logic for deleting the door (e.g., make an API call or update state)
       alert(`Deleted: ${door}`);
     }
