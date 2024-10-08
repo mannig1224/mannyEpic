@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import TopNavbar from "../components/TopNavbar/TopNavbar"; // Import TopNavbar
 import SideNavbar from "../components/SideNavbar/SideNavbar"; // Import SideNavbar
 import "./globals.css";
+import Head from "next/head"; // Import Head component for metadata
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,11 +29,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        {/* Open Graph metadata for LinkedIn */}
+        <meta property="og:PagingApp" content="My Paging App" />
+        <meta property="og:My app for a paging software" content="Check out this cool app deployed on Vercel." />
+        <meta property="og:image" content="/images/PagingImage.png" /> {/* Update this path if necessary */}
+        <meta property="og:url" content="https://manny-epic-1p552mn3a-mannig1224s-projects.vercel.app/" />
+        <meta property="og:type" content="website" />
+      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TopNavbar /> 
-        <SideNavbar /> 
+        <TopNavbar />
+        <SideNavbar />
         <div className="content"> {/* Wrapper for page-specific content */}
           {children} {/* This renders the content of each page */}
         </div>
