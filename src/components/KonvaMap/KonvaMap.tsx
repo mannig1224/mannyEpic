@@ -65,11 +65,19 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
    */
   const getRelativePointerPosition = () => {
     const stage = stageRef.current;
+  
+    // Add a check to ensure stage is not null
+    if (!stage) {
+      return { x: 0, y: 0 }; // Return default value if stage is null
+    }
+  
     const transform = stage.getAbsoluteTransform().copy();
     transform.invert(); // Invert the transformation matrix to get the original point
     const pos = stage.getPointerPosition(); // Get the pointer position in stage coordinates
+  
     return transform.point(pos); // Return the transformed point
   };
+  
 
   /**
    * Helper function to calculate the distance between two points.
