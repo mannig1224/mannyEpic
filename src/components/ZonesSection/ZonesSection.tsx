@@ -5,7 +5,7 @@ import styles from './ZonesSection.module.css'; // Import the CSS module for sty
 
 const ZonesSection: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState(''); // State for search input
-  const [selectedItems, setSelectedItems] = useState<string[]>([]); // State for multiple selections
+
 
   // Sample zone data (you can modify this or replace it with dynamic data)
   const zones = ['Zone A', 'Zone B', 'Zone C', 'Zone D'];
