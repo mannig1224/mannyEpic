@@ -122,7 +122,8 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
    * Handle adding points for drawing polygons.
    * Closes the shape if the last point is close enough to the first.
    */
-  const handleMouseDown = (_: KonvaEventObject<MouseEvent>) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleMouseDown = () => {
     if (!drawMode || isHoveringPolygon) return; // Only allow drawing in draw mode and if not hovering over an existing polygon
 
     const pointerPosition = getRelativePointerPosition();
