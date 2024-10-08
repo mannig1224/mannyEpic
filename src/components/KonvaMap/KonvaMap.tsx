@@ -11,7 +11,7 @@ interface KonvaMapProps {
 
 const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   const konvaMapRef = useRef<HTMLDivElement | null>(null); // Reference to the map container div
-  const stageRef = useRef<any>(null); // Reference to the Konva stage for controlling zoom/drag
+  const stageRef = useRef<any>(null); // This will avoid the Konva namespace reference
   const [containerSize, setContainerSize] = useState({ width: 1000, height: 800 }); // Track the size of the map container
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 }); // Track the position of the image (for centering)
   const [polygons, setPolygons] = useState<number[][][]>([]); // Store completed polygons as arrays of points
