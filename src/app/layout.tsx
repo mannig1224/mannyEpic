@@ -33,8 +33,8 @@ export default function RootLayout({
         {/* Open Graph metadata for LinkedIn */}
         <meta property="og:title" content="My Paging App" />
         <meta property="og:description" content="A paging app I have been working on. Currently trying to work on the map logic for drawing rooms." />
-        <meta property="og:url" content="https://your-deployed-site-url.com" />
-        <meta property="og:image" content="https://your-deployed-site-url.com/images/PagingImage.png" />
+        <meta property="og:url" content="https://manny-epic-mannig1224s-projects.vercel.app/" />
+        <meta property="og:image" content="https://manny-epic-mannig1224s-projects.vercel.app/images/PagingImage.png" />
       </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
