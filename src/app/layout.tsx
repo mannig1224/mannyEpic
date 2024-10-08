@@ -33,7 +33,7 @@ export default function RootLayout({
         {/* Open Graph metadata for LinkedIn */}
         <meta property="og:PagingApp" content="My Paging App" />
         <meta property="og:My app for a paging software" content="Check out this cool app deployed on Vercel." />
-        <meta property="og:image" content="/images/PagingImage.png" /> {/* Update this path if necessary */}
+        
         <meta property="og:url" content="https://manny-epic-1p552mn3a-mannig1224s-projects.vercel.app/" />
         <meta property="og:type" content="website" />
       </Head>
