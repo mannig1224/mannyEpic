@@ -24,6 +24,9 @@
     list-style-type: none; /* Remove bullet points */
     padding: 0;
     margin: 0;
+    justify-content: center;
+    width: 100%;
+    
   }
   
   /* Each tab button */
