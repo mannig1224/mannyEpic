@@ -1,7 +1,6 @@
 "use client";
 
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faBell, faTools, faCalendarAlt, faCog } from '@fortawesome/free-solid-svg-icons';
 import NavItem from '../NavItem/NavItem'; // Import the NavItem component
 import styles from './SideNavbar.module.css'; // Import the CSS module

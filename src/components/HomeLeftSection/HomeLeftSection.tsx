@@ -1,8 +1,7 @@
 import React from 'react';
 import MapContainer from '../MapContainer/MapContainer';
 import styles from './HomeLeftSection.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
+
 
 interface HomeLeftSectionProps {
   currentMap: string;

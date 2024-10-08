@@ -1,12 +1,15 @@
 import React from 'react';
+import Image from 'next/image'; // Import Image from next/image
 import styles from './SchoolLogo.module.css'; // Import the CSS module
 
 const SchoolLogo: React.FC = () => {
   return (
     <div className={styles.profileSection}>
-      <img
-        src="/images/Pine_View_Logo.png"
+      <Image
+        src="/images/Pine_View_Logo.png" // Use Next.js Image component
         alt="School Logo"
+        width={100} // Provide the actual width of the logo image
+        height={100} // Provide the actual height of the logo image
         className={styles.avatar}
       />
       <div className={styles.profileDetails}>
@@ -18,3 +21,4 @@ const SchoolLogo: React.FC = () => {
 };
 
 export default SchoolLogo;
+

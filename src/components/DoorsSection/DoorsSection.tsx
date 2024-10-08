@@ -5,7 +5,7 @@ import styles from './DoorsSection.module.css'; // Import the CSS module for sty
 
 const DoorsSection: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState(''); // State for search input
-  const [selectedItems, setSelectedItems] = useState<string[]>([]); // State for multiple selections
+
 
   // Sample door data (you can modify this or replace it with dynamic data)
   const doors = ['Front Door', 'Back Door', 'Garage Door', 'Side Door', 'Main Entrance'];
