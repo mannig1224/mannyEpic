@@ -4,6 +4,7 @@ import useImage from 'use-image';
 import mapDatabase from './mockDatabase';
 import styles from './KonvaMap.module.css'; // Import the CSS module
 import { KonvaEventObject } from 'konva/lib/Node'; // Import Konva's event object type
+import { useMaps } from '../../context/MapsContext';
 
 interface KonvaMapProps {
   currentMap: string; // The current map name (to look up in the database)
@@ -47,11 +48,11 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   // Index of the selected polygon, or null if none is selected
   const [selectedPolygonIndex, setSelectedPolygonIndex] = useState<number | null>(null);
 
-  // Get the current map image path from the mock database
-  const mapImagePath = mapDatabase[currentMap];
+  // Use MapsContext to get the selected map
+  const { selectedMap } = useMaps();
 
-  // Load the map image using useImage hook
-  const [image] = useImage(mapImagePath);
+  // Load the map image using the selected map's image path
+  const [image] = useImage(selectedMap?.imagePath || '');
 
   // Fixed map image dimensions
   const imageWidth = 1000;
@@ -78,6 +79,30 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     };
   }, []);
 
+  // Delete selected group when the Delete key is pressed
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Delete' && selectedPolygonIndex !== null) {
+        setPolygons((prevPolygons) => {
+          const updatedPolygons = prevPolygons.filter((_, index) => index !== selectedPolygonIndex);
+          console.log(`Polygon at index ${selectedPolygonIndex} has been deleted.`);
+          console.log(updatedPolygons)
+          return updatedPolygons;
+        });
+        setSelectedPolygonIndex(null); // Deselect after deleting
+      }
+    };
+  
+    // Attach event listener
+    window.addEventListener('keydown', handleKeyDown);
+  
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedPolygonIndex]);
+
+  
   /**
    * Helper function to get the relative position of the mouse pointer after applying stage transformations.
    * This ensures accurate pointer position regardless of zoom or pan.
@@ -292,7 +317,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
             <Line
               points={points}
               stroke={selectedPolygonIndex === index ? '#3E9CCB' : '#3E9CCB'}
-              strokeWidth={selectedPolygonIndex === index ? 2 : 1}
+              strokeWidth={selectedPolygonIndex === index ? 1.5 : 0.5}
               closed
               fill="rgba(243, 242, 255, 0.5)"
             />
@@ -308,7 +333,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
                       y={points[idx + 1] - 4}
                       width={8}
                       height={8}
-                      fill="white"
+                      fill="rgba(255, 255, 255, 0.9)"
                       stroke="#3E9CCB"
                       strokeWidth={0.5}
                       draggable

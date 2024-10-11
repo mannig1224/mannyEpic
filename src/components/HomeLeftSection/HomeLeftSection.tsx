@@ -1,18 +1,25 @@
 import React from 'react';
 import MapContainer from '../MapContainer/MapContainer';
 import styles from './HomeLeftSection.module.css';
-
+import { useMaps } from '../../context/MapsContext';
 
 interface HomeLeftSectionProps {
   currentMap: string;
   onMapChange: (newMap: string) => void;
 }
 
-const HomeLeftSection: React.FC<HomeLeftSectionProps> = ({ currentMap, onMapChange}) => {
-  const maps = ['Map1', 'Map2', 'Map3']; // Example map names
+const HomeLeftSection: React.FC<HomeLeftSectionProps> = ({ currentMap, onMapChange }) => {
+  // Use MapsContext to get the list of maps and select a map
+  const { maps, selectMap } = useMaps();
 
   const handleMapChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onMapChange(event.target.value); // Call parent function to update state
+    const selectedMapName = event.target.value;
+    const selectedMap = maps.find((map) => map.name === selectedMapName);
+    
+    if (selectedMap) {
+      selectMap(selectedMap.id); // Update the selected map in context
+      onMapChange(selectedMap.name); // Call the parent function to update local state
+    }
   };
 
   return (
@@ -26,8 +33,8 @@ const HomeLeftSection: React.FC<HomeLeftSectionProps> = ({ currentMap, onMapChan
             className={styles.customSelect}
           >
             {maps.map((map) => (
-              <option key={map} value={map} className={styles.customOption}>
-                {map}
+              <option key={map.id} value={map.name} className={styles.customOption}>
+                {map.name}
               </option>
             ))}
           </select>
@@ -36,7 +43,6 @@ const HomeLeftSection: React.FC<HomeLeftSectionProps> = ({ currentMap, onMapChan
         {/* Buttons for settings and page entire school */}
         <div className={styles.buttonContainer}>
           <button className={styles.pageButton}>Page Entire School</button>
-          
         </div>
       </div>
 

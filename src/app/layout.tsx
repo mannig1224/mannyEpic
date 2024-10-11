@@ -4,6 +4,7 @@ import TopNavbar from "../components/TopNavbar/TopNavbar"; // Import TopNavbar
 import SideNavbar from "../components/SideNavbar/SideNavbar"; // Import SideNavbar
 import "./globals.css";
 import Head from "next/head"; // Import Head component for metadata
+import { MapsProvider } from "@/context/MapsContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -39,11 +40,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TopNavbar />
-        <SideNavbar />
-        <div className="content"> {/* Wrapper for page-specific content */}
-          {children} {/* This renders the content of each page */}
-        </div>
+        <MapsProvider>
+          <TopNavbar />
+          <SideNavbar />
+          <div className="content"> {/* Wrapper for page-specific content */}
+            {children} {/* This renders the content of each page */}
+          </div>
+
+        </MapsProvider>
+        
       </body>
     </html>
   );
