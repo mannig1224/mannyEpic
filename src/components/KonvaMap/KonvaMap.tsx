@@ -26,7 +26,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   const [polygons, setPolygons] = useState<number[][]>([
     [100, 100, 150, 50, 200, 100], // Triangle
     [250, 100, 250, 150, 300, 150, 300, 100], // First Square
-    [350, 100, 350, 150, 400, 150, 400, 100], // Second Square
+    [411.83134800121115, 481.59871237518956, 411.83134800121115, 531.5987123751895, 461.83134800121115, 531.5987123751895, 461.83134800121115, 481.59871237518956], // Second Square
   ]);
 
   // Store points for the polygon currently being drawn
@@ -37,9 +37,6 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
 
   // Track if hovering over a polygon
   const [isHoveringPolygon, setIsHoveringPolygon] = useState(false);
-
-  // Flag to ensure the image is centered once
-  const [imageCenterInitialized, setImageCenterInitialized] = useState(false);
 
   // Track if hovering over the first vertex
   const [isHoveringFirstVertex, setIsHoveringFirstVertex] = useState(false);
@@ -59,19 +56,6 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   // Fixed map image dimensions
   const imageWidth = 1000;
   const imageHeight = 800;
-
-  /**
-   * Center the image only once when the component first mounts and `containerSize` is ready.
-   */
-  useEffect(() => {
-    if (!imageCenterInitialized && stageRef.current && image) {
-      const x = (containerSize.width - imageWidth) / 2;
-      const y = (containerSize.height - imageHeight) / 2;
-
-      setImagePosition({ x, y }); // Center the image on the canvas
-      setImageCenterInitialized(true); // Mark that the image has been centered
-    }
-  }, [imageCenterInitialized, containerSize, image, imageWidth, imageHeight]);
 
   /**
    * Update the container size whenever the window is resized.
@@ -198,12 +182,26 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   };
 
   const handleGroupDragEnd = (index: number, e: KonvaEventObject<DragEvent>) => {
-    // No need to adjust polygon points or reset the group's position
-    // The group's position now represents the movement applied during dragging
-  
-    // Optional: You can log the group's new position for debugging
+
     const group = e.target;
-    console.log(`Group position after drag: x=${group.x()}, y=${group.y()}`);
+    const deltaX = group.x();
+    const deltaY = group.y();
+    console.log("X: ", deltaX, "Y: ", deltaY)
+
+    // Update polygon points with the new position
+    setPolygons((prevPolygons) => {
+      const newPolygons = [...prevPolygons];
+      const points = newPolygons[index];
+      console.log("Points before drag: ", points)
+
+      const updatedPoints = points.map((point, idx) => (idx % 2 === 0 ? point + deltaX : point + deltaY));
+      newPolygons[index] = updatedPoints;
+      console.log("New Polygon points: ", newPolygons[index])
+      return newPolygons;
+    });
+
+    // Reset group position to (0,0) to avoid compounding translations
+    group.position({ x: 0, y: 0 });
   };
   
   
@@ -213,28 +211,38 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     pointIndex: number,
     e: KonvaEventObject<DragEvent>
   ) => {
+    e.cancelBubble = true;
     const vertex = e.target;
-    const group = vertex.getParent();
-    
-    // Get the new position of the vertex relative to the group
-    const newPos = vertex.position();
-    
-    // Adjust for the offset applied during rendering (-4)
-    const adjustedX = newPos.x + 4;
-    const adjustedY = newPos.y + 4;
-    
-    // Update the point in the polygon
-    const newPolygons = [...polygons];
+  
+    // Get new position of the vertex
+    const newPosX = vertex.x();
+    const newPosY = vertex.y();
+    console.log("New pos X:", newPosX, "Y:", newPosY);
+  
+    // Create a deep copy of the polygons array to maintain immutability
+    const newPolygons = polygons.map((polygon, idx) => 
+      idx === polygonIndex ? [...polygon] : polygon
+    );
+  
     const points = newPolygons[polygonIndex];
-    
-    points[pointIndex] = adjustedX;
-    points[pointIndex + 1] = adjustedY;
-    
-    newPolygons[polygonIndex] = points;
-    
-    // Update the state
+    console.log("Points before drag:", points);
+  
+    // Update the point in the copied polygon points
+    points[pointIndex] = newPosX;
+    points[pointIndex + 1] = newPosY;
+  
+    console.log("New Polygon points:", points);
+  
+    // Update the state with the modified polygons
     setPolygons(newPolygons);
+  
+    // Logging the updated state after the asynchronous setState operation
+    setPolygons((prevPolygons) => {
+      console.log("Updated polygons state:", prevPolygons);
+      return prevPolygons;
+    });
   };
+  
   
   
   
@@ -261,7 +269,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
               image={image}
               width={imageWidth}
               height={imageHeight}
-              x={imagePosition.x} // Initial position after centering
+              x={150} // Initial position after centering
               y={imagePosition.y}
             />
           )}
@@ -305,7 +313,9 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
                       stroke="#3E9CCB"
                       strokeWidth={0.5}
                       draggable
-                      onDragMove={(e) => handleVertexDrag(index, idx, e)}
+                      onDragMove={(e) => {
+                        handleVertexDrag(index, idx, e);
+                      }}
                     />
                   );
                 } else {

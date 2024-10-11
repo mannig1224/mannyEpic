@@ -4,4 +4,22 @@
     width: 100%;  /* Inherit the full width of the parent */
     position: relative; /* Required for internal absolute positioning */
   }
+  .toggleButton {
+    background-color: #3E9CCB;  /* Blue background color */
+    color: white;               /* White text color */
+    padding: 10px 20px;         /* Padding for better spacing */
+    border: none;               /* Remove default border */
+    border-radius: 5px;         /* Rounded corners */
+    cursor: pointer;            /* Cursor changes to pointer on hover */
+    font-size: 16px;            /* Increase the font size */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+  }
   
+  .toggleButton:hover {
+    background-color: #357a9e;  /* Darker blue on hover */
+    transform: scale(1.05);     /* Slight scale-up effect on hover */
+  }
+  
+  .toggleButton:active {
+    transform: scale(0.95);     /* Slight scale-down effect on click */
+  }
