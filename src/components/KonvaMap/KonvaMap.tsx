@@ -203,6 +203,10 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     // Reset group position to (0,0) to avoid compounding translations
     group.position({ x: 0, y: 0 });
   };
+
+  const handleVertexDragEnd = (index: number, e: KonvaEventObject<DragEvent>) => {
+    e.cancelBubble = true;
+  };
   
   
   
@@ -215,8 +219,8 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     const vertex = e.target;
   
     // Get new position of the vertex
-    const newPosX = vertex.x();
-    const newPosY = vertex.y();
+    const newPosX = vertex.x() + 4;
+    const newPosY = vertex.y() + 4;
     console.log("New pos X:", newPosX, "Y:", newPosY);
   
     // Create a deep copy of the polygons array to maintain immutability
@@ -242,11 +246,6 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
       return prevPolygons;
     });
   };
-  
-  
-  
-  
-
 
   return (
     <div ref={konvaMapRef} className={styles.konvaMap}>
@@ -316,6 +315,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
                       onDragMove={(e) => {
                         handleVertexDrag(index, idx, e);
                       }}
+                      onDragEnd={(e) => handleVertexDragEnd(index, e)}
                     />
                   );
                 } else {
