@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Stage, Layer, Image as KonvaImage, Line, Rect, Group } from 'react-konva';
+import { Stage, Layer, Image as KonvaImage, Line, Rect, Group, Text } from 'react-konva';
 import useImage from 'use-image';
-import mapDatabase from './mockDatabase';
 import styles from './KonvaMap.module.css'; // Import the CSS module
 import { KonvaEventObject } from 'konva/lib/Node'; // Import Konva's event object type
 import { useMaps } from '../../context/MapsContext';
@@ -23,18 +22,10 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   // Track the position of the image (for centering)
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
 
-  // Store completed polygons as arrays of points (each polygon is an array of numbers)
-  const [polygons, setPolygons] = useState<number[][]>([
-    [100, 100, 150, 50, 200, 100], // Triangle
-    [250, 100, 250, 150, 300, 150, 300, 100], // First Square
-    [411.83134800121115, 481.59871237518956, 411.83134800121115, 531.5987123751895, 461.83134800121115, 531.5987123751895, 461.83134800121115, 481.59871237518956], // Second Square
-  ]);
-
   // Store points for the polygon currently being drawn
   const [currentPoints, setCurrentPoints] = useState<number[]>([]);
 
-  // Toggle between draw mode and zoom/drag mode
-  const [drawMode, setDrawMode] = useState(false);
+  
 
   // Track if hovering over a polygon
   const [isHoveringPolygon, setIsHoveringPolygon] = useState(false);
@@ -45,18 +36,25 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   // Track if hovering over any other vertex
   const [isHoveringOtherVertex, setIsHoveringOtherVertex] = useState(false);
 
-  // Index of the selected polygon, or null if none is selected
-  const [selectedPolygonIndex, setSelectedPolygonIndex] = useState<number | null>(null);
+  // ID of the selected room, or null if none is selected
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
   // Use MapsContext to get the selected map
-  const { selectedMap } = useMaps();
+  const { selectedMap, updateRoomCoordinates, addNewRoom, drawMode, toggleDrawMode } = useMaps();
 
   // Load the map image using the selected map's image path
   const [image] = useImage(selectedMap?.imagePath || '');
 
   // Fixed map image dimensions
-  const imageWidth = 1000;
-  const imageHeight = 800;
+  const imageWidth = 1200;
+  const imageHeight = 1000;
+
+  // UseEffect to log changes in selectedMap.rooms
+  useEffect(() => {
+    if (selectedMap) {
+      console.log("Selected map rooms updated:", selectedMap.rooms);
+    }
+  }, [selectedMap?.rooms]);
 
   /**
    * Update the container size whenever the window is resized.
@@ -82,27 +80,22 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   // Delete selected group when the Delete key is pressed
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Delete' && selectedPolygonIndex !== null) {
-        setPolygons((prevPolygons) => {
-          const updatedPolygons = prevPolygons.filter((_, index) => index !== selectedPolygonIndex);
-          console.log(`Polygon at index ${selectedPolygonIndex} has been deleted.`);
-          console.log(updatedPolygons)
-          return updatedPolygons;
-        });
-        setSelectedPolygonIndex(null); // Deselect after deleting
+      if (event.key === 'Delete' && selectedRoomId !== null) {
+        // Handle deletion logic, if required
+        console.log(`Room with ID ${selectedRoomId} has been deleted.`);
+        setSelectedRoomId(null); // Deselect after deleting
       }
     };
-  
+
     // Attach event listener
     window.addEventListener('keydown', handleKeyDown);
-  
+
     // Clean up event listener on component unmount
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [selectedPolygonIndex]);
+  }, [selectedRoomId]);
 
-  
   /**
    * Helper function to get the relative position of the mouse pointer after applying stage transformations.
    * This ensures accurate pointer position regardless of zoom or pan.
@@ -113,13 +106,6 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     transform.invert(); // Invert the transformation matrix to get the original point
     const pos = stage.getPointerPosition(); // Get the pointer position in stage coordinates
     return transform.point(pos); // Return the transformed point
-  };
-
-  /**
-   * Helper function to calculate the distance between two points.
-   */
-  const calculateDistance = (x1: number, y1: number, x2: number, y2: number): number => {
-    return Math.hypot(x2 - x1, y2 - y1); // Use Math.hypot for better readability
   };
 
   /**
@@ -153,7 +139,6 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     stage.batchDraw(); // Redraw the stage
   };
 
-  
   /**
    * Handle adding points for drawing polygons.
    * Closes the shape if the last point is close enough to the first.
@@ -169,7 +154,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
 
     if (newPoints.length > 4) {
       // If there are at least two points
-      const distance = calculateDistance(pointerPosition.x, pointerPosition.y, firstX, firstY);
+      const distance = Math.hypot(pointerPosition.x - firstX, pointerPosition.y - firstY);
       const closeThreshold = 10; // Close shape if close to the first point
 
       if (distance <= closeThreshold) {
@@ -177,9 +162,11 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
         const updatedPoints = [...newPoints];
         updatedPoints.splice(updatedPoints.length - 2, 2); // Remove duplicate closing points
 
-        setPolygons((prevPolygons) => [...prevPolygons, updatedPoints]); // Add the new polygon to the list
-        setCurrentPoints([]); // Reset points for the next polygon
+        // Add the new room to the context by passing only the coordinates
+        addNewRoom(updatedPoints);
 
+        // Reset points for the next polygon
+        setCurrentPoints([]);
         return;
       }
     }
@@ -191,101 +178,91 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
    * Handle polygon selection.
    * Toggles the selection state of the polygon when clicked.
    */
-  const handlePolygonClick = (index: number) => {
-    if (selectedPolygonIndex === index) {
-      setSelectedPolygonIndex(null); // Deselect if already selected
+  const handlePolygonClick = (roomId: string) => {
+    if (selectedRoomId === roomId) {
+      setSelectedRoomId(null); // Deselect if already selected
     } else {
-      setSelectedPolygonIndex(index); // Select the clicked polygon
+      setSelectedRoomId(roomId); // Select the clicked polygon
     }
   };
 
   /**
-   * Toggle between drawing and zoom/drag mode.
+   * Handle group drag end event to update room coordinates.
    */
-  const toggleDrawMode = () => {
-    setDrawMode(!drawMode); // Toggle between modes
-  };
-
-  const handleGroupDragEnd = (index: number, e: KonvaEventObject<DragEvent>) => {
-
+  const handleGroupDragEnd = (roomId: string, e: KonvaEventObject<DragEvent>) => {
     const group = e.target;
+
     const deltaX = group.x();
     const deltaY = group.y();
-    console.log("X: ", deltaX, "Y: ", deltaY)
 
-    // Update polygon points with the new position
-    setPolygons((prevPolygons) => {
-      const newPolygons = [...prevPolygons];
-      const points = newPolygons[index];
-      console.log("Points before drag: ", points)
+    const room = selectedMap?.rooms.find((room) => room.id === roomId);
 
-      const updatedPoints = points.map((point, idx) => (idx % 2 === 0 ? point + deltaX : point + deltaY));
-      newPolygons[index] = updatedPoints;
-      console.log("New Polygon points: ", newPolygons[index])
-      return newPolygons;
-    });
+    if (room) {
+      const updatedPoints = room.coordinates.map((point, idx) =>
+        idx % 2 === 0 ? point + deltaX : point + deltaY
+      );
 
-    // Reset group position to (0,0) to avoid compounding translations
+      // Update the coordinates in the context
+      updateRoomCoordinates(roomId, updatedPoints);
+    }
+
     group.position({ x: 0, y: 0 });
   };
 
-  const handleVertexDragEnd = (index: number, e: KonvaEventObject<DragEvent>) => {
-    e.cancelBubble = true;
+  const getPolygonCenter = (points: number[]) => {
+    let sumX = 0;
+    let sumY = 0;
+    const numPoints = points.length / 2;
+
+    for (let i = 0; i < points.length; i += 2) {
+      sumX += points[i];
+      sumY += points[i + 1];
+    }
+
+    return {
+      x: sumX / numPoints,
+      y: sumY / numPoints,
+    };
   };
-  
-  
-  
-  const handleVertexDrag = (
-    polygonIndex: number,
-    pointIndex: number,
-    e: KonvaEventObject<DragEvent>
-  ) => {
-    e.cancelBubble = true;
-    const vertex = e.target;
-  
-    // Get new position of the vertex
-    const newPosX = vertex.x() + 4;
-    const newPosY = vertex.y() + 4;
-    console.log("New pos X:", newPosX, "Y:", newPosY);
-  
-    // Create a deep copy of the polygons array to maintain immutability
-    const newPolygons = polygons.map((polygon, idx) => 
-      idx === polygonIndex ? [...polygon] : polygon
-    );
-  
-    const points = newPolygons[polygonIndex];
-    console.log("Points before drag:", points);
-  
-    // Update the point in the copied polygon points
-    points[pointIndex] = newPosX;
-    points[pointIndex + 1] = newPosY;
-  
-    console.log("New Polygon points:", points);
-  
-    // Update the state with the modified polygons
-    setPolygons(newPolygons);
-  
-    // Logging the updated state after the asynchronous setState operation
-    setPolygons((prevPolygons) => {
-      console.log("Updated polygons state:", prevPolygons);
-      return prevPolygons;
-    });
+
+  const getTextWidth = (text: string, fontSize: number = 16, fontFamily: string = "Arial") => {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (context) {
+      context.font = `${fontSize}px ${fontFamily}`;
+      return context.measureText(text).width;
+    }
+    return 0;
   };
 
   return (
     <div ref={konvaMapRef} className={styles.konvaMap}>
-      {/* Button to toggle between drawing and zoom/drag mode */}
-      <button className={styles.toggleButton} onClick={toggleDrawMode}>
-        {drawMode ? 'Disable Draw Mode' : 'Enable Draw Mode'}
-      </button>
+        {drawMode && (
+          <div className={styles.tooltip}>
+            Click on the map to start drawing your shape.
+          </div>
+        )}
 
       <Stage
         ref={stageRef}
         width={containerSize.width}
         height={containerSize.height}
-        draggable={!drawMode} // Enable dragging only when not in draw mode
-        onWheel={handleWheel} // Zoom handler
-        onMouseDown={handleMouseDown} // Add points for drawing
+        draggable={!drawMode}
+        onWheel={handleWheel}
+        onMouseDown={handleMouseDown}
+        onMouseEnter={(e) => {
+          const container = e.target.getStage()?.container();
+          if (container) {
+            container.style.cursor = drawMode ? 'crosshair' : 'default'; // Set to 'crosshair' for pen-like appearance when drawing
+          }
+        }}
+        onMouseLeave={(e) => {
+          const container = e.target.getStage()?.container();
+          if (container) {
+            container.style.cursor = 'default'; // Reset to default when leaving the stage
+          }
+        }}
+      
       >
         <Layer>
           {image && (
@@ -293,62 +270,88 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
               image={image}
               width={imageWidth}
               height={imageHeight}
-              x={150} // Initial position after centering
+              x={150}
               y={imagePosition.y}
             />
           )}
 
           {/* Render existing polygons */}
-          {polygons.map((points, index) => (
-          <Group
-            key={index}
-            draggable={selectedPolygonIndex === index}
-            onDragEnd={(e) => handleGroupDragEnd(index, e)}
-            onClick={() => handlePolygonClick(index)}
-            onMouseEnter={(e) => {
-              e.target.getStage().container().style.cursor = 'pointer';
-              setIsHoveringPolygon(true);
-            }}
-            onMouseLeave={(e) => {
-              e.target.getStage().container().style.cursor = 'default';
-              setIsHoveringPolygon(false);
-            }}
-          >
-            <Line
-              points={points}
-              stroke={selectedPolygonIndex === index ? '#3E9CCB' : '#3E9CCB'}
-              strokeWidth={selectedPolygonIndex === index ? 1.5 : 0.5}
-              closed
-              fill="rgba(243, 242, 255, 0.5)"
-            />
-
-            {/* Render vertices if this polygon is selected */}
-            {selectedPolygonIndex === index &&
-              points.map((point, idx) => {
-                if (idx % 2 === 0 && points[idx + 1] !== undefined) {
-                  return (
-                    <Rect
-                      key={idx}
-                      x={point - 4}
-                      y={points[idx + 1] - 4}
-                      width={8}
-                      height={8}
-                      fill="rgba(255, 255, 255, 0.9)"
-                      stroke="#3E9CCB"
-                      strokeWidth={0.5}
-                      draggable
-                      onDragMove={(e) => {
-                        handleVertexDrag(index, idx, e);
-                      }}
-                      onDragEnd={(e) => handleVertexDragEnd(index, e)}
-                    />
-                  );
-                } else {
-                  return null;
+          {selectedMap?.rooms.map((room) => (
+            <Group
+              key={room.id}
+              draggable={selectedRoomId === room.id}
+              onDragEnd={(e) => handleGroupDragEnd(room.id, e)}
+              onClick={() => handlePolygonClick(room.id)}
+              onMouseEnter={(e) => {
+                e.target.getStage().container().style.cursor = 'pointer';
+                setIsHoveringPolygon(true);
+              }}
+              onMouseLeave={(e) => {
+                const container = e.target.getStage().container();
+                if (container) {
+                  container.style.cursor = drawMode ? 'crosshair' : 'default'; // Set to 'crosshair' if draw mode is on, otherwise 'default'
                 }
-              })}
-          </Group>
-        ))}
+                setIsHoveringPolygon(false);
+              }}
+            >
+              <Line
+                points={room.coordinates}
+                stroke={selectedRoomId === room.id ? '#3E9CCB' : '#3E9CCB'}
+                strokeWidth={selectedRoomId === room.id ? 1.5 : 0.5}
+                closed
+                fill="rgba(243, 242, 255, 0.5)"
+              />
+
+              {/* Render the room name inside the polygon */}
+              <Text
+                x={getPolygonCenter(room.coordinates).x}
+                y={getPolygonCenter(room.coordinates).y}
+                text={room.name}
+                fontSize={12}
+                fontFamily="Arial"
+                fontStyle="bold"
+                fill="black"
+                align="center"
+                verticalAlign="middle"
+                offsetX={getTextWidth(room.name, 14, "Arial") / 3.5}
+                offsetY={7}
+              />
+
+              {/* Render vertices if this polygon is selected */}
+              {selectedRoomId === room.id &&
+                room.coordinates.map((point, idx) => {
+                  if (idx % 2 === 0 && room.coordinates[idx + 1] !== undefined) {
+                    return (
+                      <Rect
+                        key={idx}
+                        x={point - 4}
+                        y={room.coordinates[idx + 1] - 4}
+                        width={8}
+                        height={8}
+                        fill="rgba(255, 255, 255, 0.9)"
+                        stroke="#3E9CCB"
+                        strokeWidth={0.5}
+                        draggable
+                        onDragMove={(e) => {
+                          const vertex = e.target;
+                          const newPosX = vertex.x() + 4;
+                          const newPosY = vertex.y() + 4;
+
+                          const updatedCoordinates = [...room.coordinates];
+                          updatedCoordinates[idx] = newPosX;
+                          updatedCoordinates[idx + 1] = newPosY;
+
+                          updateRoomCoordinates(room.id, updatedCoordinates);
+                        }}
+                        onDragEnd={(e) => e.cancelBubble = true}
+                      />
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
+            </Group>
+          ))}
 
           {/* Render the currently drawn polygon */}
           {currentPoints.length > 0 && (
@@ -362,7 +365,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
                 !isNaN(currentPoints[index + 1]) ? (
                   <Rect
                     key={index}
-                    x={point - 4} // Offset to center the rectangle
+                    x={point - 4}
                     y={currentPoints[index + 1] - 4}
                     width={8}
                     height={8}

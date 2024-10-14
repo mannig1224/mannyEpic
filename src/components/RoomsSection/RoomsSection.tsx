@@ -5,7 +5,7 @@ import styles from './RoomsSection.module.css'; // Import the CSS module for sty
 import { useMaps } from '../../context/MapsContext';
 
 const RoomsSection: React.FC = () => {
-  const { selectedMap } = useMaps();
+  const { selectedMap, drawMode, toggleDrawMode } = useMaps();
   const [searchTerm, setSearchTerm] = useState(''); // State for search input
   
   // Sample room data (you can modify this or replace it with dynamic data)
@@ -79,8 +79,11 @@ const handleDeleteRoom = (room: string) => {
 
       {/* Add Room Button */}
       <div className={styles.buttonContainer}>
-        <button className={styles.addButton}>
-          Add Room
+        <button
+          className={`${styles.addButton} ${drawMode ? styles.drawingMode : ''}`}
+          onClick={toggleDrawMode}
+        >
+          {drawMode ? 'Drawing...' : 'Draw Room'}
         </button>
       </div>
     </div>
