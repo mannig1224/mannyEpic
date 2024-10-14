@@ -238,10 +238,10 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   return (
     <div ref={konvaMapRef} className={styles.konvaMap}>
         {drawMode && (
-          <div className={styles.tooltip}>
-            Click on the map to start drawing your shape.
-          </div>
-        )}
+        <div className={`${styles.tooltip} ${drawMode ? styles.visible : ''}`}>
+        Draw on the map to create a shape
+      </div>
+      )}
 
       <Stage
         ref={stageRef}

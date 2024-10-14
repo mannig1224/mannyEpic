@@ -16,4 +16,12 @@
     font-size: 14px;
     z-index: 10; /* Ensure it appears above the map */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    opacity: 0; /* Initially hidden */
+    transition: opacity 5s ease-in; /* Slow fade-in effect to make it noticeable */
   }
+  
+  .tooltip.visible {
+    transition: opacity 5s ease-in;
+    opacity: 1; /* Fade in smoothly */
+  }
+  
