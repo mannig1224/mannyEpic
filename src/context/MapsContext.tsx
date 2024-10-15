@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 // Define types for Map and Room
-interface Room {
+export interface Room {
   id: string;
   name: string;
   coordinates: number[];
@@ -22,6 +22,7 @@ interface MapsContextType {
   selectedMapId: string | null;
   selectMap: (mapId: string) => void;
   updateRoomCoordinates: (roomId: string, newCoordinates: number[], textCoordinates: number[]) => void;
+  updateTextCoordinates: (roomId: string, newTextCoordinates: number[]) => void;
   addNewRoom: (coordinates: number[]) => void;
   removeRoom: (roomdId: string) => void;
   drawMode: boolean;
@@ -116,18 +117,7 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
               ],
               textCoordinates: [678.342718032413, 139.98051600523568]
             },
-            {
-              id: uuidv4(),
-              name: "Science Lab",
-              coordinates: [250, 400, 300, 400, 300, 450, 250, 450],
-              textCoordinates: [275, 425]
-            },
-            {
-              id: uuidv4(),
-              name: "Art Room",
-              coordinates: [350, 500, 400, 500, 400, 550, 350, 550],
-              textCoordinates: [375, 525]
-            }
+
           ],
       },
       {
@@ -135,8 +125,18 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
         name: "School Map 2",
         imagePath: "/images/workspace.png",
         rooms: [
-          { id: uuidv4(), name: "Classroom 201", coordinates: [411.8, 481.6, 411.8, 531.6, 461.8, 531.6, 461.8, 481.6], textCoordinates: [100, 100] },
-          { id: uuidv4(), name: "Gym", coordinates: [500, 200, 550, 200, 550, 300, 500, 300], textCoordinates: [100, 100]  },
+          {
+            id: uuidv4(),
+            name: "Science Lab",
+            coordinates: [250, 400, 300, 400, 300, 450, 250, 450],
+            textCoordinates: [275, 425]
+          },
+          {
+            id: uuidv4(),
+            name: "Art Room",
+            coordinates: [350, 500, 400, 500, 400, 550, 350, 550],
+            textCoordinates: [375, 525]
+          }
         ],
       },
   ]);
@@ -189,7 +189,24 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
     );
   };
   
-
+  // Function to update only the text coordinates of a room
+  const updateTextCoordinates = (roomId: string, newTextCoordinates: number[]) => {
+    setMaps((prevMaps) =>
+      prevMaps.map((map) => {
+        if (map.id === selectedMapId) {
+          return {
+            ...map,
+            rooms: map.rooms.map((room) =>
+              room.id === roomId
+                ? { ...room, textCoordinates: newTextCoordinates }
+                : room
+            ),
+          };
+        }
+        return map;
+      })
+    );
+  };
     // Function to calculate the centroid of a polygon
     const calculateCentroid = (points: number[]) => {
         let sumX = 0;
@@ -271,7 +288,8 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
             maps, 
             selectedMapId, 
             selectMap, 
-            updateRoomCoordinates, 
+            updateRoomCoordinates,
+            updateTextCoordinates,
             addNewRoom, 
             removeRoom,
             drawMode,

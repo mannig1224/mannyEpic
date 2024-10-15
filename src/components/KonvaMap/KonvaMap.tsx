@@ -3,7 +3,7 @@ import { Stage, Layer, Image as KonvaImage, Line, Rect, Group, Text } from 'reac
 import useImage from 'use-image';
 import styles from './KonvaMap.module.css'; // Import the CSS module
 import { KonvaEventObject } from 'konva/lib/Node'; // Import Konva's event object type
-import { useMaps } from '../../context/MapsContext';
+import { useMaps, Room } from '../../context/MapsContext';
 
 interface KonvaMapProps {
   currentMap: string; // The current map name (to look up in the database)
@@ -40,7 +40,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
   // Use MapsContext to get the selected map
-  const { selectedMap, updateRoomCoordinates, addNewRoom, drawMode, toggleDrawMode } = useMaps();
+  const { selectedMap, updateRoomCoordinates, addNewRoom, drawMode, updateTextCoordinates } = useMaps();
 
   // Load the map image using the selected map's image path
   const [image] = useImage(selectedMap?.imagePath || '');
@@ -89,6 +89,158 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     const pos = stage.getPointerPosition(); // Get the pointer position in stage coordinates
     return transform.point(pos); // Return the transformed point
   };
+
+  const distanceFromSegment = (px: number, py: number, x1: number, y1: number, x2: number, y2: number) => {
+    const A = px - x1;
+    const B = py - y1;
+    const C = x2 - x1;
+    const D = y2 - y1;
+  
+    const dot = A * C + B * D;
+    const lenSq = C * C + D * D;
+    let param = -1;
+    if (lenSq !== 0) {
+      param = dot / lenSq;
+    }
+  
+    let xx, yy;
+  
+    if (param < 0) {
+      xx = x1;
+      yy = y1;
+    } else if (param > 1) {
+      xx = x2;
+      yy = y2;
+    } else {
+      xx = x1 + param * C;
+      yy = y1 + param * D;
+    }
+  
+    const dx = px - xx;
+    const dy = py - yy;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const handlePolygonEdgeClick = (e: KonvaEventObject<MouseEvent>, room: Room) => {
+    const pointerPosition = getRelativePointerPosition();
+    if (!pointerPosition) return;
+
+    const { x, y } = pointerPosition;
+    const coordinates = room.coordinates;
+
+    let closestEdgeIndex = -1;
+    let closestDistance = Number.MAX_SAFE_INTEGER;
+
+    // Loop through the coordinates to find the nearest edge
+    for (let i = 0; i < coordinates.length; i += 2) {
+      const nextIndex = (i + 2) % coordinates.length;
+
+      const x1 = coordinates[i];
+      const y1 = coordinates[i + 1];
+      const x2 = coordinates[nextIndex];
+      const y2 = coordinates[nextIndex + 1];
+
+      const distance = distanceFromSegment(x, y, x1, y1, x2, y2);
+      if (distance < closestDistance && distance < 13.5) {
+        closestDistance = distance;
+        closestEdgeIndex = i;
+      }
+    }
+
+    // If a close enough edge is found, add a new point
+    if (closestEdgeIndex !== -1) {
+      const nextIndex = (closestEdgeIndex + 2) % coordinates.length;
+
+      const x1 = coordinates[closestEdgeIndex];
+      const y1 = coordinates[closestEdgeIndex + 1];
+      const x2 = coordinates[nextIndex];
+      const y2 = coordinates[nextIndex + 1];
+
+      // Calculate the midpoint of the selected edge
+      const newX = (x1 + x2) / 2;
+      const newY = (y1 + y2) / 2;
+
+      // Insert the new point into the coordinates array
+      const updatedCoordinates = [
+        ...coordinates.slice(0, nextIndex),
+        newX,
+        newY,
+        ...coordinates.slice(nextIndex),
+      ];
+
+      // Update the room coordinates with the new point added
+      updateRoomCoordinates(room.id, updatedCoordinates, room.textCoordinates);
+    }
+  };
+
+
+// Combining the logic for both clicking on the polygon and clicking near an edge
+const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) => {
+  e.cancelBubble = true; // Prevent event from propagating to the Stage
+  
+  console.log("Polygon click or edge detection triggered.");
+
+    // If the polygon is not currently selected, simply select it
+    if (selectedRoomId !== room.id) {
+      console.log("Polygon is not active. Activating the polygon.");
+      handlePolygonClick(room.id); // Activate the polygon
+      return; // Do not proceed further, just activate it
+    }
+
+  // First, determine if the click is near an edge using handlePolygonEdgeClick logic
+  const stage = e.target.getStage();
+  if (!stage) {
+    console.log("Stage not found.");
+    return;
+  }
+
+  // Calculate the pointer position relative to the transformations
+  const pointerPosition = getRelativePointerPosition();
+  if (!pointerPosition) {
+    console.log("Pointer position not found.");
+    return;
+  }
+
+  console.log("Pointer Position:", pointerPosition);
+
+  const { x, y } = pointerPosition;
+  const coordinates = room.coordinates;
+
+  console.log("Room Coordinates:", coordinates);
+
+  let closestEdgeIndex = -1;
+  let closestDistance = Number.MAX_SAFE_INTEGER;
+
+  // Loop through the coordinates to find the nearest edge
+  for (let i = 0; i < coordinates.length; i += 2) {
+    const nextIndex = (i + 2) % coordinates.length;
+
+    const x1 = coordinates[i];
+    const y1 = coordinates[i + 1];
+    const x2 = coordinates[nextIndex];
+    const y2 = coordinates[nextIndex + 1];
+
+    console.log(`Checking edge from (${x1}, ${y1}) to (${x2}, ${y2})`);
+
+    const distance = distanceFromSegment(x, y, x1, y1, x2, y2);
+    console.log(`Distance from point (${x}, ${y}) to edge (${x1}, ${y1}) -> (${x2}, ${y2}) is ${distance}`);
+
+    if (distance < closestDistance && distance < 13.5) { // Threshold distance of 15 pixels
+      closestDistance = distance;
+      closestEdgeIndex = i;
+      console.log(`Found closer edge at index ${i} with distance ${distance}`);
+    }
+  }
+
+  if (closestEdgeIndex !== -1) {
+    console.log("A close enough edge was found. Adding a new point...");
+    handlePolygonEdgeClick(e, room);
+  } else {
+    console.log("No edge close enough. Handling as a normal polygon click.");
+    handlePolygonClick(room.id);
+  }
+};
+
 
   /**
    * Handle zooming using the mouse wheel.
@@ -195,11 +347,11 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
         idx % 2 === 0 ? point + deltaX : point + deltaY
       );
 
-      // Update the text coordinates by applying the same delta offset
-    const updatedTextCoordinates = [
-      room.textCoordinates[0] + deltaX,
-      room.textCoordinates[1] + deltaY,
-    ];
+      // Update the text coordinates (centroid) by applying the same delta offset
+      const updatedTextCoordinates = room.textCoordinates.map((point, idx) =>
+        idx % 2 === 0 ? point + deltaX : point + deltaY
+      );
+      
 
       // Update the coordinates in the context
       updateRoomCoordinates(roomId, updatedPoints, updatedTextCoordinates);
@@ -208,6 +360,17 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
 
     group.position({ x: 0, y: 0 });
   };
+    /**
+     * Handle Text Drag End Event to update text coordinates.
+     */
+    const handleTextDragEnd = (roomId: string, e: KonvaEventObject<DragEvent>) => {
+      const textNode = e.target;
+      const newX = textNode.x();
+      const newY = textNode.y();
+
+      // Update the text coordinates in the context using the function from MapsContext
+      updateTextCoordinates(roomId, [newX, newY]);
+    };
 
 
   const getTextWidth = (text: string, fontSize: number = 16, fontFamily: string = "Arial") => {
@@ -219,6 +382,35 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     }
     return 0;
   };
+
+  const handleVertexDragMove = (
+    e: KonvaEventObject<DragEvent>,
+    room: Room,
+    idx: number
+  ) => {
+    const vertex = e.target;
+  
+    const newPosX = vertex.x() + 4;
+    const newPosY = vertex.y() + 4;
+  
+    // Update the room coordinates
+    const updatedCoordinates = [...room.coordinates];
+    updatedCoordinates[idx] = newPosX;
+    updatedCoordinates[idx + 1] = newPosY;
+  
+    // Calculate the average movement for updating textCoordinates
+    const deltaX = newPosX - room.coordinates[idx];
+    const deltaY = newPosY - room.coordinates[idx + 1];
+  
+    const updatedTextCoordinates = [
+      room.textCoordinates[0] + deltaX / 2,
+      room.textCoordinates[1] + deltaY / 2,
+    ];
+  
+    // Update the room with new coordinates and textCoordinates
+    updateRoomCoordinates(room.id, updatedCoordinates, updatedTextCoordinates);
+  };
+  
 
   return (
     <div ref={konvaMapRef} className={styles.konvaMap}>
@@ -284,8 +476,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
               onDragEnd={(e) => handleGroupDragEnd(room.id, e)}
               onClick={(e) => {
                 e.cancelBubble = true; // Prevent the event from propagating to the Stage
-                console.log('Clicked on a polygon');
-                handlePolygonClick(room.id);
+                handlePolygonClickOrEdge(e, room)
               }}
               onMouseEnter={(e) => {
                 e.target.getStage().container().style.cursor = 'pointer';
@@ -309,8 +500,8 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
 
               {/* Render the room name inside the polygon */}
               <Text
-                x={room.textCoordinates[0]}
-                y={room.textCoordinates[1]}
+                x={room.textCoordinates?.[0] ?? 0} // Provide a fallback value of 0 if textCoordinates is undefined
+                y={room.textCoordinates?.[1] ?? 0}
                 draggable
                 text={room.name}
                 fontSize={12}
@@ -329,6 +520,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
                 }}
                 onDragEnd={(e) => {
                   e.cancelBubble = true; // Stop propagation of the drag end event
+                  handleTextDragEnd(room.id, e);
                 }}
               />
 
@@ -347,17 +539,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
                         stroke="#3E9CCB"
                         strokeWidth={0.5}
                         draggable
-                        onDragMove={(e) => {
-                          const vertex = e.target;
-                          const newPosX = vertex.x() + 4;
-                          const newPosY = vertex.y() + 4;
-
-                          const updatedCoordinates = [...room.coordinates];
-                          updatedCoordinates[idx] = newPosX;
-                          updatedCoordinates[idx + 1] = newPosY;
-
-                          updateRoomCoordinates(room.id, updatedCoordinates);
-                        }}
+                        onDragMove={(e) => handleVertexDragMove(e, room, idx)}
                         onDragEnd={(e) => e.cancelBubble = true}
                       />
                     );
