@@ -15,7 +15,7 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
 
   // Reference to the Konva stage for controlling zoom/drag
   const stageRef = useRef<Konva.Stage | null>(null);
-
+  const groupRefs = useRef(new Map());
   // Track the size of the map container
   const [containerSize, setContainerSize] = useState({ width: 1000, height: 800 });
 
@@ -77,24 +77,6 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     };
   }, []);
 
-  // Delete selected group when the Delete key is pressed
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Delete' && selectedRoomId !== null) {
-        // Handle deletion logic, if required
-        console.log(`Room with ID ${selectedRoomId} has been deleted.`);
-        setSelectedRoomId(null); // Deselect after deleting
-      }
-    };
-
-    // Attach event listener
-    window.addEventListener('keydown', handleKeyDown);
-
-    // Clean up event listener on component unmount
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [selectedRoomId]);
 
   /**
    * Helper function to get the relative position of the mouse pointer after applying stage transformations.
@@ -144,6 +126,8 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
    * Closes the shape if the last point is close enough to the first.
    */
   const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+
+    
     if (!drawMode || isHoveringPolygon || isHoveringOtherVertex) return; // Only allow drawing if not hovering over a polygon or vertex
 
     const pointerPosition = getRelativePointerPosition(); // Get the accurate pointer position
@@ -179,10 +163,19 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
    * Toggles the selection state of the polygon when clicked.
    */
   const handlePolygonClick = (roomId: string) => {
+    if (drawMode) return; // If draw mode is active, don't allow polygon selection
+  
     if (selectedRoomId === roomId) {
       setSelectedRoomId(null); // Deselect if already selected
     } else {
       setSelectedRoomId(roomId); // Select the clicked polygon
+  
+      // Access the group reference for the selected room
+      const group = groupRefs.current.get(roomId);
+      if (group) {
+        group.moveToTop(); // Bring the selected group to the front of the layer
+        group.getLayer().batchDraw(); // Redraw the layer to reflect the change
+      }
     }
   };
 
@@ -202,28 +195,20 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
         idx % 2 === 0 ? point + deltaX : point + deltaY
       );
 
+      // Update the text coordinates by applying the same delta offset
+    const updatedTextCoordinates = [
+      room.textCoordinates[0] + deltaX,
+      room.textCoordinates[1] + deltaY,
+    ];
+
       // Update the coordinates in the context
-      updateRoomCoordinates(roomId, updatedPoints);
+      updateRoomCoordinates(roomId, updatedPoints, updatedTextCoordinates);
     }
+
 
     group.position({ x: 0, y: 0 });
   };
 
-  const getPolygonCenter = (points: number[]) => {
-    let sumX = 0;
-    let sumY = 0;
-    const numPoints = points.length / 2;
-
-    for (let i = 0; i < points.length; i += 2) {
-      sumX += points[i];
-      sumY += points[i + 1];
-    }
-
-    return {
-      x: sumX / numPoints,
-      y: sumY / numPoints,
-    };
-  };
 
   const getTextWidth = (text: string, fontSize: number = 16, fontFamily: string = "Arial") => {
     const canvas = document.createElement('canvas');
@@ -249,7 +234,14 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
         height={containerSize.height}
         draggable={!drawMode}
         onWheel={handleWheel}
-        onMouseDown={handleMouseDown}
+        onMouseDown={(e) => {
+          // If clicking outside of any shape (i.e., on the stage), deselect the polygon
+          const clickedOnEmpty = e.target === e.target.getStage();
+          if (clickedOnEmpty) {
+            setSelectedRoomId(null);
+          }
+          handleMouseDown(e); // Existing logic for adding points to a polygon
+        }}
         onMouseEnter={(e) => {
           const container = e.target.getStage()?.container();
           if (container) {
@@ -272,6 +264,10 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
               height={imageHeight}
               x={150}
               y={imagePosition.y}
+              onClick={() => {
+                // When clicking on the map image, deselect any selected polygons
+                setSelectedRoomId(null);
+              }}
             />
           )}
 
@@ -279,9 +275,18 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
           {selectedMap?.rooms.map((room) => (
             <Group
               key={room.id}
+              ref={(ref) => {
+                if (ref) {
+                  groupRefs.current.set(room.id, ref);
+                }
+              }}
               draggable={selectedRoomId === room.id}
               onDragEnd={(e) => handleGroupDragEnd(room.id, e)}
-              onClick={() => handlePolygonClick(room.id)}
+              onClick={(e) => {
+                e.cancelBubble = true; // Prevent the event from propagating to the Stage
+                console.log('Clicked on a polygon');
+                handlePolygonClick(room.id);
+              }}
               onMouseEnter={(e) => {
                 e.target.getStage().container().style.cursor = 'pointer';
                 setIsHoveringPolygon(true);
@@ -304,8 +309,9 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
 
               {/* Render the room name inside the polygon */}
               <Text
-                x={getPolygonCenter(room.coordinates).x}
-                y={getPolygonCenter(room.coordinates).y}
+                x={room.textCoordinates[0]}
+                y={room.textCoordinates[1]}
+                draggable
                 text={room.name}
                 fontSize={12}
                 fontFamily="Arial"
@@ -315,6 +321,15 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
                 verticalAlign="middle"
                 offsetX={getTextWidth(room.name, 14, "Arial") / 3.5}
                 offsetY={7}
+                onDragStart={(e) => {
+                  e.cancelBubble = true; // Stop propagation of the drag start event
+                }}
+                onDragMove={(e) => {
+                  e.cancelBubble = true; // Stop propagation of the drag move event
+                }}
+                onDragEnd={(e) => {
+                  e.cancelBubble = true; // Stop propagation of the drag end event
+                }}
               />
 
               {/* Render vertices if this polygon is selected */}

@@ -7,6 +7,7 @@ interface Room {
   id: string;
   name: string;
   coordinates: number[];
+  textCoordinates: number[];
 }
 
 interface Map {
@@ -20,8 +21,9 @@ interface MapsContextType {
   maps: Map[];
   selectedMapId: string | null;
   selectMap: (mapId: string) => void;
-  updateRoomCoordinates: (roomId: string, newCoordinates: number[]) => void;
+  updateRoomCoordinates: (roomId: string, newCoordinates: number[], textCoordinates: number[]) => void;
   addNewRoom: (coordinates: number[]) => void;
+  removeRoom: (roomdId: string) => void;
   drawMode: boolean;
   toggleDrawMode: () => void;
   selectedMapRooms: Room[] | null;
@@ -38,24 +40,103 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
         name: "School Map 1",
         imagePath: "/images/workspace.png",
         rooms: [
-          { id: uuidv4(), name: "Classroom 101", coordinates: [100, 100, 150, 50, 200, 100] },
-          { id: uuidv4(), name: "Library", coordinates: [250, 100, 250, 150, 300, 150, 300, 100] },
-          { id: uuidv4(), name: "Classroom 102", coordinates: [300, 200, 350, 200, 350, 250, 300, 250] },
-          { id: uuidv4(), name: "Cafeteria", coordinates: [400, 300, 450, 300, 450, 350, 400, 350] },
-          { id: uuidv4(), name: "Classroom 103", coordinates: [500, 100, 550, 100, 550, 150, 500, 150] },
-          { id: uuidv4(), name: "Computer Lab", coordinates: [150, 300, 200, 300, 200, 350, 150, 350] },
-          { id: uuidv4(), name: "Gymnasium", coordinates: [600, 200, 700, 200, 700, 300, 600, 300] },
-          { id: uuidv4(), name: "Science Lab", coordinates: [250, 400, 300, 400, 300, 450, 250, 450] },
-          { id: uuidv4(), name: "Art Room", coordinates: [350, 500, 400, 500, 400, 550, 350, 550] },
-        ],
+            {
+              id: uuidv4(),
+              name: "Classroom 101",
+              coordinates: [
+                468.1024862582756, 597.6500424294452, 
+                465.11075749402943, 495.65004639673003, 
+                552.1049832351069, 599.6500422768572
+              ],
+              textCoordinates: [495.7720756624707, 564.3167103670105]
+            },
+            {
+              id: uuidv4(),
+              name: "Library",
+              coordinates: [
+                462.7492929392111, 92.28250058879844,
+                462.74929293921105, 185.9121660212048,
+                552.009866821385, 186.78475932985296,
+                550.7011810253125, 92.28250058879843
+              ],
+              textCoordinates: [507.55290893178, 139.31598163266365]
+            },
+            {
+              id: uuidv4(),
+              name: "Classroom 102",
+              coordinates: [
+                949.0109514698116, 186.83676140760528,
+                1034.381637037875, 187.65946381962993,
+                1033.5590629548967, 297.7167398974308,
+                949.0109514698115, 298.5394423094554
+              ],
+              textCoordinates: [991.4906502330987, 242.68860135853086]
+            },
+            {
+              id: uuidv4(),
+              name: "Cafeteria",
+              coordinates: [
+                462.51563030634435, 285.19135658355594,
+                551.1766122063202, 286.0140589955805,
+                550.3540381233422, 385.3762037170608,
+                463.33820438932264, 384.55350130503615
+              ],
+              textCoordinates: [506.34662175683285, 335.28378090080885]
+            },
+            {
+              id: uuidv4(),
+              name: "Classroom 103",
+              coordinates: [
+                722.9170447645452, 92.34719146957048,
+                817.041356828923, 92.09209785188948,
+                817.2964106558848, 186.47838732838085,
+                722.6619909375835, 186.73348094606186
+              ],
+              textCoordinates: [769.9797007967341, 139.41278939897566]
+            },
+            {
+              id: uuidv4(),
+              name: "Computer Lab",
+              coordinates: [
+                463.9509968296843, 187.00000862121516,
+                550.3726833198182, 187.26785691978017,
+                550.640489838128, 285.48055066148635,
+                463.14757727475484, 285.2127023629213
+              ],
+              textCoordinates: [507.02843681509686, 236.24027914135073]
+            },
+            {
+              id: uuidv4(),
+              name: "Gymnasium",
+              coordinates: [
+                634.1451933462922, 92.60541282232774,
+                722.412717306053, 92.35031920464675,
+                722.6677711330148, 186.22807238030313,
+                634.1451933462922, 186.73825961566507
+              ],
+              textCoordinates: [678.342718032413, 139.98051600523568]
+            },
+            {
+              id: uuidv4(),
+              name: "Science Lab",
+              coordinates: [250, 400, 300, 400, 300, 450, 250, 450],
+              textCoordinates: [275, 425]
+            },
+            {
+              id: uuidv4(),
+              name: "Art Room",
+              coordinates: [350, 500, 400, 500, 400, 550, 350, 550],
+              textCoordinates: [375, 525]
+            }
+          ],
       },
       {
         id: "2",
         name: "School Map 2",
         imagePath: "/images/workspace.png",
         rooms: [
-          { id: uuidv4(), name: "Classroom 201", coordinates: [411.8, 481.6, 411.8, 531.6, 461.8, 531.6, 461.8, 481.6] },
-          { id: uuidv4(), name: "Gym", coordinates: [500, 200, 550, 200, 550, 300, 500, 300] },
+          { id: uuidv4(), name: "Classroom 201", coordinates: [411.8, 481.6, 411.8, 531.6, 461.8, 531.6, 461.8, 481.6], textCoordinates: [100, 100] },
+          { id: uuidv4(), name: "Gym", coordinates: [500, 200, 550, 200, 550, 300, 500, 300], textCoordinates: [100, 100]  },
         ],
       },
   ]);
@@ -86,14 +167,20 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Function to update the coordinates of a room
-  const updateRoomCoordinates = (roomId: string, newCoordinates: number[]) => {
+  const updateRoomCoordinates = (
+    roomId: string,
+    newCoordinates: number[],
+    newTextCoordinates: number[]
+  ) => {
     setMaps((prevMaps) =>
       prevMaps.map((map) => {
         if (map.id === selectedMapId) {
           return {
             ...map,
             rooms: map.rooms.map((room) =>
-              room.id === roomId ? { ...room, coordinates: newCoordinates } : room
+              room.id === roomId
+                ? { ...room, coordinates: newCoordinates, textCoordinates: newTextCoordinates }
+                : room
             ),
           };
         }
@@ -101,8 +188,21 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
       })
     );
   };
+  
 
+    // Function to calculate the centroid of a polygon
+    const calculateCentroid = (points: number[]) => {
+        let sumX = 0;
+        let sumY = 0;
+        const numPoints = points.length / 2;
 
+        for (let i = 0; i < points.length; i += 2) {
+        sumX += points[i];
+        sumY += points[i + 1];
+        }
+
+        return [sumX / numPoints, sumY / numPoints];
+    };
 
   const addNewRoom = (coordinates: number[]) => {
     console.log("Attempting to add new room...");
@@ -124,11 +224,14 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
           // Create a unique ID for the new room using uuid
           const newRoomId = uuidv4();
   
+          // Calculate the centroid for the text coordinates
+          const textCoordinates = calculateCentroid(coordinates);
           // Create the new room object
           const newRoom: Room = {
             id: newRoomId,
             name: newRoomName,
             coordinates: coordinates,
+            textCoordinates: textCoordinates,
           };
   
           console.log("Adding new room to context:", newRoom);
@@ -145,7 +248,21 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
     setDrawMode(false);
   };
   
+  const removeRoom = (roomId: string) => {
+    console.log("Attempting to remove room with ID:", roomId);
 
+    setMaps((prevMaps) =>
+      prevMaps.map((map) => {
+        if (map.id === selectedMapId) {
+          return {
+            ...map,
+            rooms: map.rooms.filter((room) => room.id !== roomId),
+          };
+        }
+        return map;
+      })
+    );
+  };
 
 
   return (
@@ -156,6 +273,7 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
             selectMap, 
             updateRoomCoordinates, 
             addNewRoom, 
+            removeRoom,
             drawMode,
             toggleDrawMode,
             selectedMapRooms, 

@@ -5,7 +5,7 @@ import styles from './RoomsSection.module.css'; // Import the CSS module for sty
 import { useMaps } from '../../context/MapsContext';
 
 const RoomsSection: React.FC = () => {
-  const { selectedMap, drawMode, toggleDrawMode } = useMaps();
+  const { selectedMap, drawMode, toggleDrawMode, removeRoom } = useMaps();
   const [searchTerm, setSearchTerm] = useState(''); // State for search input
   
   // Sample room data (you can modify this or replace it with dynamic data)
@@ -24,9 +24,8 @@ const handleEditRoom = (room: string) => {
 
 // Handle Delete Room (logic can be customized)
 const handleDeleteRoom = (room: string) => {
-  if (window.confirm(`Are you sure you want to delete ${room}?`)) {
-    // Logic for deleting the room (e.g., make an API call or update state)
-    alert(`Deleted: ${room}`);
+  if (window.confirm(`Are you sure you want to delete this room?`)) {
+    removeRoom(room);
   }
 };
 
@@ -67,7 +66,7 @@ const handleDeleteRoom = (room: string) => {
                 <FontAwesomeIcon
                   icon={faTrashAlt}
                   className={styles.deleteIcon}
-                  onClick={() => handleDeleteRoom(room.name)}
+                  onClick={() => handleDeleteRoom(room.id)}
                 />
               </div>
             </div>
