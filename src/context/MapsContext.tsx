@@ -122,8 +122,27 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
       },
       {
         id: "2",
-        name: "School Map 2",
-        imagePath: "/images/workspace.png",
+        name: "Home",
+        imagePath: "/images/home.webp",
+        rooms: [
+          {
+            id: uuidv4(),
+            name: "Science Lab",
+            coordinates: [250, 400, 300, 400, 300, 450, 250, 450],
+            textCoordinates: [275, 425]
+          },
+          {
+            id: uuidv4(),
+            name: "Art Room",
+            coordinates: [350, 500, 400, 500, 400, 550, 350, 550],
+            textCoordinates: [375, 525]
+          }
+        ],
+      },
+      {
+        id: "3",
+        name: "Hospital",
+        imagePath: "/images/hospital.webp",
         rooms: [
           {
             id: uuidv4(),
