@@ -193,6 +193,10 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
     newCoordinates: number[],
     newTextCoordinates: number[]
   ) => {
+    if (newCoordinates.length < 6) {
+      console.warn("Coordinates must contain at least four values (two points). Update aborted.");
+      return;
+    }
     setMaps((prevMaps) =>
       prevMaps.map((map) => {
         if (map.id === selectedMapId) {
@@ -319,7 +323,7 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
     }
   
     // Create new coordinates by adding an offset of a few pixels
-    const offset = 10; // 10 pixels offset
+    const offset = (10 * duplicateNumber); // 10 pixels offset
     const newCoordinates = roomToDuplicate.coordinates.map((point, idx) =>
       idx % 2 === 0 ? point + offset : point + offset
     );

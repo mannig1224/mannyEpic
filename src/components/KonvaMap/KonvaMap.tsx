@@ -50,6 +50,12 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
             ...room.coordinates.slice(vertexIndex + 2),
           ];
 
+        // Ensure at least two points (four values) remain
+        if (updatedCoordinates.length < 6) {
+              console.warn('Cannot delete vertex: at least two points are required.');
+              return;
+            }
+
           updateRoomCoordinates(roomId, updatedCoordinates, room.textCoordinates); // Update context state
           setHoveredVertexIndex(null); // Reset hovered state after deletion
         }
