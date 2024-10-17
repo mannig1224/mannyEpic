@@ -25,6 +25,8 @@ interface MapsContextType {
   updateTextCoordinates: (roomId: string, newTextCoordinates: number[]) => void;
   addNewRoom: (coordinates: number[]) => void;
   removeRoom: (roomdId: string) => void;
+  editRoom: (roomId: string, updatedRoomData: Partial<Room>) => void;
+  duplicateRoom: (roomId: string) => void;
   drawMode: boolean;
   toggleDrawMode: () => void;
   selectedMapRooms: Room[] | null;
@@ -161,8 +163,8 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
   ]);
 
 
-    // Initially set the selectedMapId to null, and assign the first map later using useEffect
-    const [selectedMapId, setSelectedMapId] = useState<string | null>(null);
+  // Initially set the selectedMapId to null, and assign the first map later using useEffect
+  const [selectedMapId, setSelectedMapId] = useState<string | null>(null);
   // Drawing mode state
   const [drawMode, setDrawMode] = useState<boolean>(false);
 
@@ -300,6 +302,75 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  const duplicateRoom = (roomId: string) => {
+    const roomToDuplicate = selectedMap?.rooms.find((room) => room.id === roomId);
+    if (!roomToDuplicate) {
+      console.error("Room not found for duplication");
+      return;
+    }
+  
+    let duplicateNumber = 1;
+    let newRoomName = `${roomToDuplicate.name} (${duplicateNumber})`;
+  
+    // Keep incrementing the number until a unique name is found
+    while (selectedMap?.rooms.some((room) => room.name === newRoomName)) {
+      duplicateNumber++;
+      newRoomName = `${roomToDuplicate.name} (${duplicateNumber})`;
+    }
+  
+    // Create new coordinates by adding an offset of a few pixels
+    const offset = 10; // 10 pixels offset
+    const newCoordinates = roomToDuplicate.coordinates.map((point, idx) =>
+      idx % 2 === 0 ? point + offset : point + offset
+    );
+
+
+    // Create a new room object with new coordinates and unique ID
+    const newRoom = {
+      ...roomToDuplicate,
+      id: uuidv4(), // Assign a new unique ID for the duplicate room
+      name: newRoomName,
+      coordinates: newCoordinates,
+      textCoordinates: [
+        roomToDuplicate.textCoordinates[0] + offset,
+        roomToDuplicate.textCoordinates[1] + offset,
+      ], // Offset the text coordinates as well
+    };
+  
+    console.log("Duplicating room:", newRoom);
+  
+    // Update the rooms list with the new duplicate room
+    setMaps((prevMaps) =>
+      prevMaps.map((map) => {
+        if (map.id === selectedMapId) {
+          return {
+            ...map,
+            rooms: [...map.rooms, newRoom],
+          };
+        }
+        return map;
+      })
+    );
+  };
+  
+  // Function to edit a room's details (e.g., name or coordinates)
+  const editRoom = (roomId: string, updatedRoomData: Partial<Room>) => {
+    setMaps((prevMaps) =>
+      prevMaps.map((map) => {
+        if (map.id === selectedMapId) {
+          return {
+            ...map,
+            rooms: map.rooms.map((room) =>
+              room.id === roomId
+                ? { ...room, ...updatedRoomData }
+                : room
+            ),
+          };
+        }
+        return map;
+      })
+    );
+  };
 
   return (
     <MapsContext.Provider 
@@ -311,6 +382,8 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
             updateTextCoordinates,
             addNewRoom, 
             removeRoom,
+            editRoom,
+            duplicateRoom,
             drawMode,
             toggleDrawMode,
             selectedMapRooms, 

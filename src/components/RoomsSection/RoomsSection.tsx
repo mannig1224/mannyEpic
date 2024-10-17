@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faEdit, faTrashAlt, faCopy } from '@fortawesome/free-solid-svg-icons';
 import styles from './RoomsSection.module.css'; // Import the CSS module for styling
-import { useMaps } from '../../context/MapsContext';
+import { useMaps, Room } from '../../context/MapsContext';
+import Modal from '../Modal/Modal';
+
 
 const RoomsSection: React.FC = () => {
-  const { selectedMap, drawMode, toggleDrawMode, removeRoom } = useMaps();
+  const { selectedMap, drawMode, toggleDrawMode, removeRoom, duplicateRoom, editRoom, } = useMaps();
   const [searchTerm, setSearchTerm] = useState(''); // State for search input
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRoom, setSelectedRoom,] = useState<Room | null>(null);
   // Sample room data (you can modify this or replace it with dynamic data)
   const rooms = selectedMap?.rooms || [];
 
@@ -16,12 +19,24 @@ const RoomsSection: React.FC = () => {
     setSearchTerm(e.target.value);
   };
 
-// Handle Edit Room (logic can be customized)
-const handleEditRoom = (room: string) => {
-  alert(`Editing: ${room}`);
-  // You can implement your edit logic here (e.g., open a modal for editing)
-};
+  // Handle Edit Room button click
+  const handleEditRoom = (room: Room) => {
+    setSelectedRoom(room);
+    setIsModalOpen(true);
+  };
 
+  // Handle closing the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // Handle saving the changes to the room
+  const handleSaveChanges = () => {
+    if (selectedRoom) {
+      editRoom(selectedRoom.id, { name: selectedRoom.name }); // Update the room details using editRoom from context
+      closeModal(); // Close the modal after saving changes
+    }
+  };
 // Handle Delete Room (logic can be customized)
 const handleDeleteRoom = (room: string) => {
   if (window.confirm(`Are you sure you want to delete this room?`)) {
@@ -56,11 +71,17 @@ const handleDeleteRoom = (room: string) => {
               <span>{room.name}</span>
 
               <div className={styles.actions}>
+                {/* Duplicate Button */}
+                <FontAwesomeIcon
+                  icon={faCopy}
+                  className={styles.copyIcon}
+                  onClick={() => duplicateRoom(room.id)}
+                />
                 {/* Edit Button */}
                 <FontAwesomeIcon
                   icon={faEdit}
                   className={styles.editIcon}
-                  onClick={() => handleEditRoom(room.name)}
+                  onClick={() => handleEditRoom(room)}
                 />
                 {/* Delete Button */}
                 <FontAwesomeIcon
@@ -85,6 +106,33 @@ const handleDeleteRoom = (room: string) => {
           {drawMode ? 'Drawing...' : 'Draw Room'}
         </button>
       </div>
+
+{/* Modal for Editing Room */}
+{isModalOpen && selectedRoom && (
+        <Modal onClose={closeModal}>
+          <div className={styles.modalContent}>
+            <h2>Edit Room</h2>
+            <div className={styles.inputWrapper}>
+              <label className={styles.inputLabel}>
+                Room Name:
+                <input
+                  type="text"
+                  value={selectedRoom.name}
+                  onChange={(e) =>
+                    setSelectedRoom({ ...selectedRoom, name: e.target.value })
+                  }
+                  className={styles.inputField}
+                />
+              </label>
+            </div>
+            {/* You can add more inputs for editing other room details here */}
+            <div className={styles.modalActions}>
+              <button onClick={handleSaveChanges} className={styles.saveButton}>Save Changes</button>
+              <button onClick={closeModal} className={styles.closeButton}>Close</button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
