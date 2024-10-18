@@ -124,21 +124,99 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
       },
       {
         id: "2",
-        name: "Home",
-        imagePath: "/images/home.webp",
+        name: "Workspace 2",
+        imagePath: "/images/workspace.png",
         rooms: [
           {
             id: uuidv4(),
             name: "Science Lab",
-            coordinates: [250, 400, 300, 400, 300, 450, 250, 450],
+            coordinates: [
+              612,
+              706,
+              639,
+              707,
+              638,
+              770,
+              611,
+              768
+            ],
             textCoordinates: [275, 425]
           },
           {
             id: uuidv4(),
             name: "Art Room",
-            coordinates: [350, 500, 400, 500, 400, 550, 350, 550],
+            coordinates: [
+              642,
+              706,
+              669,
+              707,
+              668,
+              770,
+              641,
+              768
+            ],
             textCoordinates: [375, 525]
-          }
+          },
+          {
+            id: uuidv4(),
+            name: "Art Room 2",
+            coordinates: [
+              643,
+              637,
+              669,
+              638,
+              668,
+              704,
+              641,
+              703
+            ],
+            textCoordinates: [375, 525]
+          },
+          {
+            id: uuidv4(),
+            name: "Art Room 3",
+            coordinates: [
+              612,
+              637,
+              639,
+              638,
+              638,
+              704,
+              611,
+              703
+            ],
+            textCoordinates: [375, 525]
+          },
+          {
+            id: uuidv4(),
+            name: "Art Room 4",
+            coordinates: [
+              418,
+              638,
+              566,
+              637,
+              568,
+              768,
+              419,
+              770
+            ],
+            textCoordinates: [375, 525]
+          },
+          {
+            id: uuidv4(),
+            name: "Art Room 5",
+            coordinates: [
+              643,
+              586,
+              669,
+              588,
+              667,
+              636,
+              641,
+              634
+            ],
+            textCoordinates: [375, 525]
+          },
         ],
       },
       {

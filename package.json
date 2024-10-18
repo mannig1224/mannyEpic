@@ -11,6 +11,7 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@techstark/opencv-js": "^4.10.0-release.1",
     "classnames": "^2.5.1",
     "konva": "^9.3.15",
     "next": "^14.2.13",
@@ -21,9 +22,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@types/leaflet": "^1.9.12",
     "@types/node": "^20",
-    "@types/paper": "^0.11.14",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^10.0.0",

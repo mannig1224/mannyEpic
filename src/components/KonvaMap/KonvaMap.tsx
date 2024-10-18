@@ -28,6 +28,8 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   // Fixed map image dimensions
   const imageWidth = 1200;
   const imageHeight = 1000;
+   
+
    // Effect to turn off selected polygon when switching drawMode
    useEffect(() => {
     if (drawMode) {
@@ -456,7 +458,6 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
     // Update the room with new coordinates and textCoordinates
     updateRoomCoordinates(room.id, updatedCoordinates, updatedTextCoordinates);
   };
-  
 
   return (
     <div ref={konvaMapRef} className={styles.konvaMap}>
@@ -464,6 +465,7 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
         <div className={`${styles.tooltip} ${drawMode ? styles.visible : ''}`}>
         Draw on the map to create a shape
       </div>
+      
       )}
 
       <Stage
