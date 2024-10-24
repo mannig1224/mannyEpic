@@ -21,6 +21,7 @@ interface MapsContextType {
   maps: Map[];
   selectedMapId: string | null;
   selectMap: (mapId: string) => void;
+  createRoomsFromCorners: (corners: number[][]) => void;
   updateRoomCoordinates: (roomId: string, newCoordinates: number[], textCoordinates: number[]) => void;
   updateTextCoordinates: (roomId: string, newTextCoordinates: number[]) => void;
   addNewRoom: (coordinates: number[]) => void;
@@ -125,7 +126,7 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
       {
         id: "2",
         name: "Workspace 2",
-        imagePath: "/images/workspace.png",
+        imagePath: "/images/workspace_2.png",
         rooms: [
           {
             id: uuidv4(),
@@ -292,6 +293,33 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
     );
   };
   
+  const createRoomsFromCorners = (corners: number[][]) => {
+    if (!selectedMap) return;
+
+    // Create new rooms based on corners data
+  const newRooms: Room[] = corners.map((corner, index) => {
+    const adjustedCorners = corner.map((value, i) => (i % 2 === 0 ? value + 150 : value));
+    const centroid = calculateCentroid(corner); // Calculate the centroid
+    const centroidOffset = centroid.map((value, i) => (i % 2 === 0 ? value + 150 : value));
+    return {
+      id: `room-${index}`,
+      name: `Room ${index + 1}`,
+      coordinates: adjustedCorners, // Store the corner coordinates as the room shape
+      textCoordinates: centroidOffset, // Store the centroid as textCoordinates
+    };
+  });
+
+  // Update the selected map with new rooms (remove any existing rooms)
+  const updatedMaps = maps.map((map) =>
+    map.id === selectedMap.id
+      ? { ...map, rooms: newRooms } // Replace current rooms with newRooms
+      : map
+  );
+
+  setMaps(updatedMaps);
+};
+
+
   // Function to update only the text coordinates of a room
   const updateTextCoordinates = (roomId: string, newTextCoordinates: number[]) => {
     setMaps((prevMaps) =>
@@ -459,7 +487,8 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
         value={{ 
             maps, 
             selectedMapId, 
-            selectMap, 
+            selectMap,
+            createRoomsFromCorners, 
             updateRoomCoordinates,
             updateTextCoordinates,
             addNewRoom, 

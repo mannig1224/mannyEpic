@@ -25,10 +25,31 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   const [image] = useImage(selectedMap?.imagePath || ''); // Load the map image using the selected map's image path
   const [hoveredVertexIndex, setHoveredVertexIndex] = useState<number | null>(null);
   const [hoveredVertexFromSelected, setHoveredVertexFromSelected] = useState<{ roomId: string; vertexIndex: number } | null>(null);
-  // Fixed map image dimensions
-  const imageWidth = 1200;
-  const imageHeight = 1000;
+  const [imageDimensions, setImageDimensions] = useState<{ width: number, height: number } | null>(null);
    
+
+  useEffect(() => {
+    if (image) {
+      // Create a new image object to get its natural dimensions
+      const img = new window.Image();
+      img.src = selectedMap?.imagePath || ''; // Use the selected map's imagePath
+
+      img.onload = () => {
+        // Once the image is loaded, set the natural width and height
+        setImageDimensions({
+          width: img.naturalWidth,
+          height: img.naturalHeight,
+        });
+      };
+    }
+  }, [image, selectedMap?.imagePath]);
+
+
+
+
+
+
+
 
    // Effect to turn off selected polygon when switching drawMode
    useEffect(() => {
@@ -171,97 +192,11 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     return Math.sqrt(dx * dx + dy * dy);
   };
 
-  const handlePolygonEdgeClick = (e: KonvaEventObject<MouseEvent>, room: Room) => {
-    const pointerPosition = getRelativePointerPosition();
-    if (!pointerPosition) return;
-
-    const { x, y } = pointerPosition;
-    const coordinates = room.coordinates;
-
-    let closestEdgeIndex = -1;
-    let closestDistance = Number.MAX_SAFE_INTEGER;
-
-    // Loop through the coordinates to find the nearest edge
-    for (let i = 0; i < coordinates.length; i += 2) {
-      const nextIndex = (i + 2) % coordinates.length;
-
-      const x1 = coordinates[i];
-      const y1 = coordinates[i + 1];
-      const x2 = coordinates[nextIndex];
-      const y2 = coordinates[nextIndex + 1];
-
-      const distance = distanceFromSegment(x, y, x1, y1, x2, y2);
-      if (distance < closestDistance && distance < 10.5) {
-        closestDistance = distance;
-        closestEdgeIndex = i;
-      }
-    }
-
-    // If a close enough edge is found, add a new point
-    if (closestEdgeIndex !== -1) {
-      const nextIndex = (closestEdgeIndex + 2) % coordinates.length;
-
-      const x1 = coordinates[closestEdgeIndex];
-      const y1 = coordinates[closestEdgeIndex + 1];
-      const x2 = coordinates[nextIndex];
-      const y2 = coordinates[nextIndex + 1];
-
-      // Calculate the midpoint of the selected edge
-      const newX = (x1 + x2) / 2;
-      const newY = (y1 + y2) / 2;
-
-      // Insert the new point into the coordinates array
-      const updatedCoordinates = [
-        ...coordinates.slice(0, nextIndex),
-        newX,
-        newY,
-        ...coordinates.slice(nextIndex),
-      ];
-
-      // Update the room coordinates with the new point added
-      updateRoomCoordinates(room.id, updatedCoordinates, room.textCoordinates);
-    }
-  };
-
-
-// Combining the logic for both clicking on the polygon and clicking near an edge
-const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) => {
-  e.cancelBubble = true; // Prevent event from propagating to the Stage
-  
-  console.log("Polygon click or edge detection triggered.");
-
-    // If the polygon is not currently selected, simply select it
-    if (selectedRoomId !== room.id) {
-      console.log("Polygon is not active. Activating the polygon.");
-      handlePolygonClick(room.id); // Activate the polygon
-      return; // Do not proceed further, just activate it
-    }
-
-  // First, determine if the click is near an edge using handlePolygonEdgeClick logic
-  const stage = e.target.getStage();
-  if (!stage) {
-    console.log("Stage not found.");
-    return;
-  }
-
-  // Calculate the pointer position relative to the transformations
-  const pointerPosition = getRelativePointerPosition();
-  if (!pointerPosition) {
-    console.log("Pointer position not found.");
-    return;
-  }
-
-  console.log("Pointer Position:", pointerPosition);
-
-  const { x, y } = pointerPosition;
-  const coordinates = room.coordinates;
-
-  console.log("Room Coordinates:", coordinates);
-
+// Helper function to find the closest edge
+const findClosestEdge = (x: number, y: number, coordinates: number[]): { index: number, distance: number } => {
   let closestEdgeIndex = -1;
   let closestDistance = Number.MAX_SAFE_INTEGER;
 
-  // Loop through the coordinates to find the nearest edge
   for (let i = 0; i < coordinates.length; i += 2) {
     const nextIndex = (i + 2) % coordinates.length;
 
@@ -270,26 +205,79 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
     const x2 = coordinates[nextIndex];
     const y2 = coordinates[nextIndex + 1];
 
-    console.log(`Checking edge from (${x1}, ${y1}) to (${x2}, ${y2})`);
-
     const distance = distanceFromSegment(x, y, x1, y1, x2, y2);
-    console.log(`Distance from point (${x}, ${y}) to edge (${x1}, ${y1}) -> (${x2}, ${y2}) is ${distance}`);
-
-    if (distance < closestDistance && distance < 10.5) { // Threshold distance of 15 pixels
+    if (distance < closestDistance && distance < 10.5) {
       closestDistance = distance;
       closestEdgeIndex = i;
-      console.log(`Found closer edge at index ${i} with distance ${distance}`);
     }
   }
 
+  return { index: closestEdgeIndex, distance: closestDistance };
+};
+
+// Handle polygon edge click
+const handlePolygonEdgeClick = (e: KonvaEventObject<MouseEvent>, room: Room) => {
+  const pointerPosition = getRelativePointerPosition();
+  if (!pointerPosition) return;
+
+  const { x, y } = pointerPosition;
+  const coordinates = room.coordinates;
+
+  const { index: closestEdgeIndex } = findClosestEdge(x, y, coordinates);
+
+  // If a close enough edge is found, add a new point
   if (closestEdgeIndex !== -1) {
-    console.log("A close enough edge was found. Adding a new point...");
+    const nextIndex = (closestEdgeIndex + 2) % coordinates.length;
+
+    const x1 = coordinates[closestEdgeIndex];
+    const y1 = coordinates[closestEdgeIndex + 1];
+    const x2 = coordinates[nextIndex];
+    const y2 = coordinates[nextIndex + 1];
+
+    
+    const newX = x;
+    const newY = y;
+
+    // Insert the new point into the coordinates array
+    const updatedCoordinates = [
+      ...coordinates.slice(0, nextIndex),
+      newX,
+      newY,
+      ...coordinates.slice(nextIndex),
+    ];
+
+    // Update the room coordinates with the new point added
+    updateRoomCoordinates(room.id, updatedCoordinates, room.textCoordinates);
+  }
+};
+
+// Handle both polygon click and edge click
+const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) => {
+  e.cancelBubble = true; // Prevent event from propagating to the Stage
+
+  if (selectedRoomId !== room.id) {
+    handlePolygonClick(room.id); // Activate the polygon
+    return;
+  }
+
+  const stage = e.target.getStage();
+  if (!stage) return;
+
+  const pointerPosition = getRelativePointerPosition();
+  if (!pointerPosition) return;
+
+  const { x, y } = pointerPosition;
+  const coordinates = room.coordinates;
+
+  const { index: closestEdgeIndex } = findClosestEdge(x, y, coordinates);
+
+  if (closestEdgeIndex !== -1) {
     handlePolygonEdgeClick(e, room);
   } else {
-    console.log("No edge close enough. Handling as a normal polygon click.");
     handlePolygonClick(room.id);
   }
 };
+
 
 
   /**
@@ -500,8 +488,8 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
           {image && (
             <KonvaImage
               image={image}
-              width={imageWidth}
-              height={imageHeight}
+              width={imageDimensions?.width}
+              height={imageDimensions?.height}
               x={150}
               y={imagePosition.y}
               onClick={() => {
@@ -555,7 +543,7 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
                 fontSize={12}
                 fontFamily="Arial"
                 fontStyle="bold"
-                fill="black"
+                fill={selectedRoomId === room.id ? "#189BFB" : "black"}
                 align="center"
                 verticalAlign="middle"
                 offsetX={getTextWidth(room.name, 14, "Arial") / 3.5}

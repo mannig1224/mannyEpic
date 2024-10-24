@@ -7,12 +7,51 @@ import Modal from '../Modal/Modal';
 
 
 const RoomsSection: React.FC = () => {
-  const { selectedMap, drawMode, toggleDrawMode, removeRoom, duplicateRoom, editRoom, } = useMaps();
+  const { selectedMap, drawMode, toggleDrawMode, removeRoom, duplicateRoom, editRoom, createRoomsFromCorners } = useMaps();
   const [searchTerm, setSearchTerm] = useState(''); // State for search input
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRoom, setSelectedRoom,] = useState<Room | null>(null);
+  const [loadingOpenCV, setLoadingOpenCV] = useState(false);
   // Sample room data (you can modify this or replace it with dynamic data)
   const rooms = selectedMap?.rooms || [];
+
+
+  // Call OpenCV API to detect corners
+  const callOpenCV = async () => {
+    if (!selectedMap) {
+      console.error('No image selected for the map');
+      return;
+    }
+
+    try {
+      setLoadingOpenCV(true);
+
+      // Fetch the image from the public folder using the imagePath
+      const imageUrl = `${window.location.origin}${selectedMap.imagePath}`;
+      const imageFile = await fetch(imageUrl)
+        .then((response) => response.blob())
+        .then((blob) => new File([blob], 'mapImage.png', { type: 'image/png' }));
+
+      // Create FormData and append the image file
+      const formData = new FormData();
+      formData.append('image', imageFile);
+
+      // Send API request to the Flask server
+      const response = await fetch('http://127.0.0.1:5000/detect-corners', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      console.log('Corners detected:', data);
+      createRoomsFromCorners(data.corners);
+
+      setLoadingOpenCV(false);
+    } catch (error) {
+      console.error('Error calling OpenCV API:', error);
+      setLoadingOpenCV(false);
+    }
+  };
 
   // Handle search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,7 +144,14 @@ const handleDeleteRoom = (room: string) => {
         >
           {drawMode ? 'Drawing...' : 'Draw Room'}
         </button>
+        <button
+          className={`${styles.addButton} ${loadingOpenCV ? styles.drawingMode : ''}`}
+          onClick={callOpenCV}
+        >
+          {drawMode ? 'Scanning...' : 'Scan Image'}
+        </button>
       </div>
+
 
 {/* Modal for Editing Room */}
 {isModalOpen && selectedRoom && (
