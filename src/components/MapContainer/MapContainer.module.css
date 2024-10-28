@@ -3,12 +3,12 @@
 .mapContainer {
   height: 100%; /* Ensure the map takes the full height of its container */
   width: 100%;  /* Ensure the map takes the full width of its container */
-  min-height: 650px; /* Add a minimum height to ensure the map is visible */
+  min-height: 500px; /* Add a minimum height to ensure the map is visible */
   position: relative; /* Position relative for internal absolute positioning if needed */
   border-radius: 0 0 8px 8px; /* Rounded corners for a more modern look */
-  border: 1px solid #ddd; /* Light border for visual distinction */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  
+  
   overflow: hidden; /* Prevent content from overflowing out of the container */
-  background-color: #fafdff; /* Optional: Light background color for visual contrast */
+  background-color: #f9fcfd; /* Optional: Light background color for visual contrast */
 }
 

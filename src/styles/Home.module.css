@@ -2,9 +2,10 @@
 .mainContent {
   margin-left: 85px; /* Adjust according to side navbar width */
   margin-top: 70px;  /* Adjust according to top navbar height */
-  padding: 2rem;
+  padding: 1.2rem;
   display: flex;
-  gap: 2rem; /* Gap between the map and the second section */
+  gap: 1.2rem; /* Gap between the map and the second section */
+  
 }
 
 

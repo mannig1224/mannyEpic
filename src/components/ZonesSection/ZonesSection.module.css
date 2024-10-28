@@ -4,9 +4,8 @@
     flex-direction: column;
     gap: 20px;
     padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 0 0 8px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #f9fcfd; /* Optional: Light background color for visual contrast */
+    border-radius: 0 0 8px 8px; /* Rounded corners for a more modern look */
     width: 100%;
     height: 100%;
     
@@ -48,7 +47,7 @@
     padding: 10px;
     border-radius: 8px;
     background-color: #fff;
-    height: 500px;
+    height: 450px;
   }
   
   /* Styling for each list item (zone) */

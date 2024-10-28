@@ -1,152 +1,169 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Stage, Layer, Image as KonvaImage, Line, Rect, Group, Text } from 'react-konva';
 import useImage from 'use-image';
-import styles from './KonvaMap.module.css'; // Import the CSS module
-import { KonvaEventObject } from 'konva/lib/Node'; // Import Konva's event object type
+import styles from './KonvaMap.module.css'; 
+import { KonvaEventObject } from 'konva/lib/Node'; 
 import { useMaps, Room } from '../../context/MapsContext';
+import { distanceFromSegment } from '../../utils/geometryUtils';
+
+
 
 interface KonvaMapProps {
-  currentMap: string; // The current map name (to look up in the database)
+  currentMap: string; 
 }
 
 const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
   
-  const konvaMapRef = useRef<HTMLDivElement | null>(null); // Reference to the map container div
-  const stageRef = useRef<Konva.Stage | null>(null); // Reference to the Konva stage for controlling zoom/drag
-  const groupRefs = useRef(new Map());
-  const [containerSize, setContainerSize] = useState({ width: 1000, height: 800 }); // Track the size of the map container
-  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 }); // Track the position of the image (for centering)
-  const [currentPoints, setCurrentPoints] = useState<number[]>([]); // Store points for the polygon currently being drawn
-  const [isHoveringPolygon, setIsHoveringPolygon] = useState(false); // Track if hovering over a polygon
-  const [isHoveringFirstVertex, setIsHoveringFirstVertex] = useState(false); // Track if hovering over the first vertex
-  const [isHoveringOtherVertex, setIsHoveringOtherVertex] = useState(false); // Track if hovering over any other vertex
-  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null); // ID of the selected room, or null if none is selected
-  const { selectedMap, updateRoomCoordinates, addNewRoom, drawMode, updateTextCoordinates } = useMaps(); // Use MapsContext to get the selected map
-  const [image] = useImage(selectedMap?.imagePath || ''); // Load the map image using the selected map's image path
-  const [hoveredVertexIndex, setHoveredVertexIndex] = useState<number | null>(null);
-  const [hoveredVertexFromSelected, setHoveredVertexFromSelected] = useState<{ roomId: string; vertexIndex: number } | null>(null);
-  const [imageDimensions, setImageDimensions] = useState<{ width: number, height: number } | null>(null);
+// Refs (references to DOM elements or Konva elements)
+const konvaMapRef = useRef<HTMLDivElement | null>(null); // Reference to the map container div
+const stageRef = useRef<Konva.Stage | null>(null); // Reference to the Konva stage for controlling zoom/drag
+const groupRefs = useRef(new Map()); // Reference to groups of Konva elements (polygons, etc.)
+
+// State for container and image management
+const [containerSize, setContainerSize] = useState({ width: 1000, height: 800 }); // Track the size of the map container
+const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 }); // Track the position of the image (for centering)
+const [imageDimensions, setImageDimensions] = useState<{ width: number, height: number } | null>(null); // Store the dimensions of the image
+
+// State for the current polygon being drawn and hover behavior
+const [currentPoints, setCurrentPoints] = useState<number[]>([]); // Store points for the polygon currently being drawn
+const [isHoveringPolygon, setIsHoveringPolygon] = useState(false); // Track if hovering over a polygon
+const [isHoveringFirstVertex, setIsHoveringFirstVertex] = useState(false); // Track if hovering over the first vertex
+const [isHoveringOtherVertex, setIsHoveringOtherVertex] = useState(false); // Track if hovering over any other vertex
+const [hoveredVertexIndex, setHoveredVertexIndex] = useState<number | null>(null); // Track the index of the hovered vertex
+const [vertexFromSelectedPolygon, setVertexFromSelectedPolygon] = useState<{ roomId: string; vertexIndex: number } | null>(null); // Track if hovering over a selected room's vertex
+
+// State for managing room selection
+const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null); // ID of the selected room, or null if none is selected
+
+// Context for map and drawing mode (comes from MapsContext)
+const { selectedMap, updateRoomCoordinates, addNewRoom, drawMode, updateTextCoordinates } = useMaps(); // Use MapsContext to get the selected map and functions for room management
+
+// Image loading (using the selected map's image path)
+const [image] = useImage(selectedMap?.imagePath || ''); // Load the map image using the selected map's image path
+
    
 
-  useEffect(() => {
-    if (image) {
-      // Create a new image object to get its natural dimensions
-      const img = new window.Image();
-      img.src = selectedMap?.imagePath || ''; // Use the selected map's imagePath
+// Initialization: Load image and get its dimensions
+useEffect(() => {
+  if (image) {
+    // Create a new image object to get its natural dimensions
+    const img = new window.Image();
+    img.src = selectedMap?.imagePath || ''; // Use the selected map's imagePath
 
-      img.onload = () => {
-        // Once the image is loaded, set the natural width and height
-        setImageDimensions({
-          width: img.naturalWidth,
-          height: img.naturalHeight,
-        });
-      };
+    img.onload = () => {
+      // Once the image is loaded, set the natural width and height
+      setImageDimensions({
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+      });
+    };
+  }
+}, [image, selectedMap?.imagePath]); // Dependencies: rerun when the image or imagePath changes
+
+// Effect to update container size based on window resize
+useEffect(() => {
+  // Get container dimensions and update state
+  const updateContainerSize = () => {
+    if (konvaMapRef.current) {
+      const { width, height } = konvaMapRef.current.getBoundingClientRect();
+      if (width > 0 && height > 0) setContainerSize({ width, height });
     }
-  }, [image, selectedMap?.imagePath]);
+  };
+
+  // Set initial size and add resize listener
+  updateContainerSize();
+  window.addEventListener('resize', updateContainerSize);
+
+  // Cleanup: remove resize listener on unmount
+  return () => {
+    window.removeEventListener('resize', updateContainerSize);
+  };
+}, []); // Runs only once on mount
 
 
+// Effect to handle "Delete" key for removing vertices from selected polygon
+useEffect(() => {
+  // Handle "Delete" key and remove selected vertex
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key !== 'Delete' || !vertexFromSelectedPolygon) return;
 
+    const { roomId, vertexIndex } = vertexFromSelectedPolygon;
+    const room = selectedMap?.rooms.find((room) => room.id === roomId);
+    if (!room || vertexIndex < 0 || vertexIndex >= room.coordinates.length) return;
 
+    // Remove vertex (x, y) pair and update room coordinates
+    const updatedCoordinates = [
+      ...room.coordinates.slice(0, vertexIndex),
+      ...room.coordinates.slice(vertexIndex + 2),
+    ];
 
-
-
-
-   // Effect to turn off selected polygon when switching drawMode
-   useEffect(() => {
-    if (drawMode) {
-      setSelectedRoomId(null); // Deselect any selected polygon when switching to draw mode
-    } else {
-      setCurrentPoints([])
+    if (updatedCoordinates.length < 6) {
+      console.warn('At least three points required.');
+      return;
     }
-  }, [drawMode]);
-    // Effect to handle the delete key event for deleting vertices in an existing polygon
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Delete' && hoveredVertexFromSelected) {
-        const { roomId, vertexIndex } = hoveredVertexFromSelected;
 
-        const room = selectedMap?.rooms.find((room) => room.id === roomId);
-        if (room) {
-          // Remove the vertex at vertexIndex and the next (since points are x, y pairs)
-          const updatedCoordinates = [
-            ...room.coordinates.slice(0, vertexIndex),
-            ...room.coordinates.slice(vertexIndex + 2),
-          ];
+    updateRoomCoordinates(roomId, updatedCoordinates, room.textCoordinates);
+    setHoveredVertexIndex(null);
+  };
 
-        // Ensure at least two points (four values) remain
-        if (updatedCoordinates.length < 6) {
-              console.warn('Cannot delete vertex: at least two points are required.');
-              return;
-            }
+  // Add keydown listener
+  window.addEventListener('keydown', handleKeyDown);
 
-          updateRoomCoordinates(roomId, updatedCoordinates, room.textCoordinates); // Update context state
-          setHoveredVertexIndex(null); // Reset hovered state after deletion
-        }
-      }
-    };
-
-    // Attach keydown event listener
-    window.addEventListener('keydown', handleKeyDown);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [hoveredVertexFromSelected, selectedMap, updateRoomCoordinates]);
-
-    // Effect to handle the delete key event for deleting vertices while drawing
-    useEffect(() => {
-      
-      const handleKeyDown = (event: KeyboardEvent) => {
-        if (event.key === 'Delete' && hoveredVertexIndex !== null) {
-          // Create a new array without the hovered vertex (both x and y coordinates)
-          const updatedPoints = [
-            ...currentPoints.slice(0, hoveredVertexIndex),
-            ...currentPoints.slice(hoveredVertexIndex + 2)
-          ];
-          setCurrentPoints(updatedPoints);
-          setHoveredVertexIndex(null); // Reset after deletion
-          setIsHoveringOtherVertex(false)
-        }
-      };
-    
-      // Attach keydown event listener
-      window.addEventListener('keydown', handleKeyDown);
-  
-      // Cleanup event listener on component unmount
-      return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-      };
-}, [hoveredVertexIndex, currentPoints, setCurrentPoints]);
+  // Cleanup: remove keydown listener on unmount
+  return () => {
+    window.removeEventListener('keydown', handleKeyDown);
+  };
+}, [vertexFromSelectedPolygon, selectedMap, updateRoomCoordinates]); // Re-run if dependencies change
 
 
-  // UseEffect to log changes in selectedMap.rooms
-  useEffect(() => {
-    if (selectedMap) {
-      console.log("Selected map rooms updated:", selectedMap.rooms);
+useEffect(() => {
+  // Handle "Delete" key to remove hovered vertex from current polygon
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key !== 'Delete') return; // Exit if not the "Delete" key
+    if (hoveredVertexIndex === null) return; // Exit if no vertex is hovered
+
+    // Check that hovered vertex index is valid
+    if (hoveredVertexIndex < 0 || hoveredVertexIndex >= currentPoints.length) {
+      console.warn('Invalid hovered vertex index.');
+      return;
     }
-  }, [selectedMap?.rooms]);
 
-  /**
-   * Update the container size whenever the window is resized.
-   */
-  useEffect(() => {
-    const updateContainerSize = () => {
-      if (konvaMapRef.current) {
-        const { width, height } = konvaMapRef.current.getBoundingClientRect();
-        if (width > 0 && height > 0) {
-          setContainerSize({ width, height });
-        }
-      }
-    };
+    // Remove hovered vertex (x, y pair) from current points
+    const updatedPoints = [
+      ...currentPoints.slice(0, hoveredVertexIndex),
+      ...currentPoints.slice(hoveredVertexIndex + 2)
+    ];
 
-    updateContainerSize(); // Set initial size
-    window.addEventListener('resize', updateContainerSize); // Update size on window resize
+    setCurrentPoints(updatedPoints); // Update current points
+    setHoveredVertexIndex(null); // Reset hovered vertex
+    setIsHoveringOtherVertex(false); // Reset hover state
+  };
 
-    return () => {
-      window.removeEventListener('resize', updateContainerSize); // Cleanup event listener
-    };
-  }, []);
+  // Attach keydown event listener
+  window.addEventListener('keydown', handleKeyDown);
+
+  // Cleanup: remove keydown event listener on unmount
+  return () => {
+    window.removeEventListener('keydown', handleKeyDown);
+  };
+}, [hoveredVertexIndex, currentPoints, setCurrentPoints]); // Dependencies: re-run if hovered vertex or points change
+
+
+// State Handling: Reset selected polygon when switching draw mode
+useEffect(() => {
+  if (drawMode) {
+    setSelectedRoomId(null); // Deselect polygon when entering draw mode
+  } else {
+    setCurrentPoints([]); // Clear drawing points when exiting draw mode
+  }
+}, [drawMode]); // Re-run when drawMode changes
+
+// Logging: Log changes to selected map rooms (low priority)
+useEffect(() => {
+  if (selectedMap) {
+    console.log("Selected map rooms updated:", selectedMap.rooms); // Log room updates
+  }
+}, [selectedMap?.rooms]); // Re-run when the rooms in selectedMap change
 
 
   /**
@@ -161,36 +178,6 @@ const KonvaMap: React.FC<KonvaMapProps> = ({ currentMap }) => {
     return transform.point(pos); // Return the transformed point
   };
 
-  const distanceFromSegment = (px: number, py: number, x1: number, y1: number, x2: number, y2: number) => {
-    const A = px - x1;
-    const B = py - y1;
-    const C = x2 - x1;
-    const D = y2 - y1;
-  
-    const dot = A * C + B * D;
-    const lenSq = C * C + D * D;
-    let param = -1;
-    if (lenSq !== 0) {
-      param = dot / lenSq;
-    }
-  
-    let xx, yy;
-  
-    if (param < 0) {
-      xx = x1;
-      yy = y1;
-    } else if (param > 1) {
-      xx = x2;
-      yy = y2;
-    } else {
-      xx = x1 + param * C;
-      yy = y1 + param * D;
-    }
-  
-    const dx = px - xx;
-    const dy = py - yy;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
 
 // Helper function to find the closest edge
 const findClosestEdge = (x: number, y: number, coordinates: number[]): { index: number, distance: number } => {
@@ -277,8 +264,6 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
     handlePolygonClick(room.id);
   }
 };
-
-
 
   /**
    * Handle zooming using the mouse wheel.
@@ -529,7 +514,7 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
               <Line
                 points={room.coordinates}
                 stroke={selectedRoomId === room.id ? '#3E9CCB' : '#3E9CCB'}
-                strokeWidth={selectedRoomId === room.id ? 1.5 : 0.5}
+                strokeWidth={selectedRoomId === room.id ? 1.2 : 0.3}
                 closed
                 fill="rgba(243, 242, 255, 0.5)"
               />
@@ -538,7 +523,7 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
               <Text
                 x={room.textCoordinates?.[0] ?? 0} // Provide a fallback value of 0 if textCoordinates is undefined
                 y={room.textCoordinates?.[1] ?? 0}
-                draggable
+                draggable={selectedRoomId === room.id}
                 text={room.name}
                 fontSize={12}
                 fontFamily="Arial"
@@ -576,8 +561,8 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
                         strokeWidth={0.5}
                         draggable
                         onDragMove={(e) => handleVertexDragMove(e, room, idx)}
-                        onMouseEnter={() => setHoveredVertexFromSelected({ roomId: room.id, vertexIndex: idx })}
-                        onMouseLeave={() => setHoveredVertexFromSelected(null)}
+                        onMouseEnter={() => setVertexFromSelectedPolygon({ roomId: room.id, vertexIndex: idx })}
+                        onMouseLeave={() => setVertexFromSelectedPolygon(null)}
                         onDragEnd={(e) => e.cancelBubble = true}
                       />
                     );

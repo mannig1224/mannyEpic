@@ -8,7 +8,7 @@
   position: fixed; /* Fix the sidebar in place */
   top: 0; /* Ensure it touches the top of the screen */
   left: 0; /* Ensure it touches the left side of the screen */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); */
   padding: 0; /* Remove any padding that pushes the sidebar */
   margin: 0; /* Remove any margin */
   z-index: 500;

@@ -126,7 +126,7 @@ export const MapsProvider = ({ children }: { children: ReactNode }) => {
       {
         id: "2",
         name: "Workspace 2",
-        imagePath: "/images/workspace_2.png",
+        imagePath: "/images/hexagons.png",
         rooms: [
           {
             id: uuidv4(),

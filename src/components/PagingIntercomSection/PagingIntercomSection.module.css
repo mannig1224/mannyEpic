@@ -2,14 +2,12 @@
 .pagingIntercomContainer {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
     gap: 20px;
     padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 0 0 8px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #f9fcfd; /* Optional: Light background color for visual contrast */
+    border-radius: 0 0 8px 8px; /* Rounded corners for a more modern look */
     width: 100%;
-    max-width: 500px; /* Adjust width as needed */
+    height: 100%;
   }
   
   /* Wrapper for search input and icon */
