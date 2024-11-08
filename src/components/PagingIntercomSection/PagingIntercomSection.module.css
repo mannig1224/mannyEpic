@@ -70,7 +70,7 @@
   
   /* Scrollable list container for rooms/zones */
   .scrollableList {
-    height: 300px; /* Set a maximum height for the list */
+    height: 45vh; /* Set a maximum height for the list */
     overflow-y: auto; /* Enable scrolling if the list exceeds the max height */
     border: 1px solid #ddd;
     padding: 10px;
@@ -123,7 +123,7 @@
     display: flex;
     justify-content: center;
     gap: 10px; /* Add a small gap between the buttons */
-    margin-top: 20px;
+    margin-top: 5px;
   }
   
   /* Clear selection button styling */

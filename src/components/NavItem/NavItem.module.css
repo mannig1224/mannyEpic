@@ -6,7 +6,7 @@
     height: 70px; /* Fixed height for all items */
     padding: 0 10px;
     text-align: center;
-    color: #564d54; /* Grey color for text and icons */
+    color: #4b444a; /* Grey color for text and icons */
     cursor: pointer;
   }
   
@@ -18,7 +18,7 @@
   }
   
   .itemActive {
-    background-color: rgba(var(--primary-color-rgb, 246, 130, 32), 0.8); /* Darker orange for active items */
+    background-color: rgba(var(--primary-color-rgb, 246, 130, 32)); /* Darker orange for active items */
     color: #fff; /* Solid white for icons and text */
     border-radius: 6px;
     margin: 5px;

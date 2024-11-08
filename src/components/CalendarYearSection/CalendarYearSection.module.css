@@ -1,0 +1,9 @@
+/* components/CalendarYearSection/CalendarYearSection.module.css */
+.calendarYearContainer {
+    padding: 1rem; /* Inner padding for content spacing */
+    background-color: #ffffff; /* Light background color */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    height: 85vh;
+    width: 75vw;
+  }

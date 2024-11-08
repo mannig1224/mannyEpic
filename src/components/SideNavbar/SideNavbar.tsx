@@ -14,32 +14,37 @@ const SideNavbar = () => {
         <NavItem
           icon={faHome}
           label="Home"
-          isActive={activeItem === 'Home'}
-          onClick={() => setActiveItem('Home')}
+          href="/" // Home route
+          isActive={activeItem === "Home"}
+          onClick={() => setActiveItem("Home")}
         />
         <NavItem
           icon={faBell}
           label="Bell Schedule"
-          isActive={activeItem === 'Bell Schedule'}
-          onClick={() => setActiveItem('Bell Schedule')}
+          href="/bellschedule" // Bell Schedule route
+          isActive={activeItem === "Bell Schedule"}
+          onClick={() => setActiveItem("Bell Schedule")}
         />
         <NavItem
           icon={faTools}
           label="Devices"
-          isActive={activeItem === 'Devices'}
-          onClick={() => setActiveItem('Devices')}
+          href="/devices" // Devices route
+          isActive={activeItem === "Devices"}
+          onClick={() => setActiveItem("Devices")}
         />
         <NavItem
           icon={faCalendarAlt}
           label="Events"
-          isActive={activeItem === 'Events'}
-          onClick={() => setActiveItem('Events')}
+          href="/events" // Events route
+          isActive={activeItem === "Events"}
+          onClick={() => setActiveItem("Events")}
         />
         <NavItem
           icon={faCog}
           label="Settings"
-          isActive={activeItem === 'Settings'}
-          onClick={() => setActiveItem('Settings')}
+          href="/settings" // Settings route
+          isActive={activeItem === "Settings"}
+          onClick={() => setActiveItem("Settings")}
         />
       </ul>
     </div>

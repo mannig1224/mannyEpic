@@ -1,0 +1,75 @@
+/* components/DayTypesSection/DayTypesSection.module.css */
+
+.dayTypesContainer {
+    padding: 1rem; /* Inner padding for content spacing */
+    background-color: #ffffff; /* Light background color */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    
+    height: 85vh;
+    width: 20vw;
+  }
+  
+  .dayTypeHeading {
+    color: #1a3c7f;
+    font-weight: 600; /* Semi-bold font weight */
+    font-size: 1.8rem; /* Font size similar to the example */
+    display: flex;
+    justify-content: space-between; /* Space between the heading and icon */
+    align-items: center; /* Center vertically */
+    margin-bottom: 1rem; /* Space below the heading */
+    padding-bottom: 0.5rem; /* Add some spacing above the border */
+    border-bottom: 1px solid #ddd;
+  }
+  
+
+  .addIcon {
+    cursor: pointer; /* Change cursor to pointer on hover */
+    color: #007bff;
+    font-size: 1.2rem;
+    transition: color 0.6s, transform 0.6s ease-in-out; /* Smooth transition for color and rotation */
+    background-color: aliceblue;
+    border-radius: 100%;
+    padding: 5px;
+  }
+  
+  .addIcon:hover {
+    color: #0056b3; /* Change color on hover */
+    transform: rotate(180deg); /* Rotate the icon 90 degrees on hover */
+  }
+
+  /* Scrollable list container */
+.scrollableList {
+    height: 70vh; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable scrolling if the list exceeds the max height */
+    
+    padding: 10px;
+    
+  }
+  
+  /* Styling for each list item */
+  .listItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f0f4fb;
+    margin-bottom: 10px;
+    
+    color: #1a3c7f;
+    transition: background-color 0.2s ease;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  
+  /* Hover effect for list items */
+  .listItem:hover {
+    background-color: #e3ebf6;
+  }
+
+  .editIcon {
+    color: #007bff;
+    cursor: pointer;
+  }
+

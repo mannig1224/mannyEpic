@@ -496,7 +496,7 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
               draggable={selectedRoomId === room.id}
               onDragEnd={(e) => handleGroupDragEnd(room.id, e)}
               onClick={(e) => {
-                e.cancelBubble = true; // Prevent the event from propagating to the Stage
+                e.cancelBubble = true; 
                 handlePolygonClickOrEdge(e, room)
               }}
               onMouseEnter={(e) => {
@@ -506,14 +506,14 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
               onMouseLeave={(e) => {
                 const container = e.target.getStage().container();
                 if (container) {
-                  container.style.cursor = drawMode ? 'crosshair' : 'default'; // Set to 'crosshair' if draw mode is on, otherwise 'default'
+                  container.style.cursor = drawMode ? 'crosshair' : 'default'; 
                 }
                 setIsHoveringPolygon(false);
               }}
             >
               <Line
                 points={room.coordinates}
-                stroke={selectedRoomId === room.id ? '#3E9CCB' : '#3E9CCB'}
+                stroke={selectedRoomId === room.id ? 'rgba(118, 195, 243)' : 'rgba(118, 195, 243)'}
                 strokeWidth={selectedRoomId === room.id ? 1.2 : 0.3}
                 closed
                 fill="rgba(243, 242, 255, 0.5)"
@@ -521,7 +521,7 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
 
               {/* Render the room name inside the polygon */}
               <Text
-                x={room.textCoordinates?.[0] ?? 0} // Provide a fallback value of 0 if textCoordinates is undefined
+                x={room.textCoordinates?.[0] ?? 0} 
                 y={room.textCoordinates?.[1] ?? 0}
                 draggable={selectedRoomId === room.id}
                 text={room.name}
@@ -534,13 +534,13 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
                 offsetX={getTextWidth(room.name, 14, "Arial") / 3.5}
                 offsetY={7}
                 onDragStart={(e) => {
-                  e.cancelBubble = true; // Stop propagation of the drag start event
+                  e.cancelBubble = true; 
                 }}
                 onDragMove={(e) => {
-                  e.cancelBubble = true; // Stop propagation of the drag move event
+                  e.cancelBubble = true; 
                 }}
                 onDragEnd={(e) => {
-                  e.cancelBubble = true; // Stop propagation of the drag end event
+                  e.cancelBubble = true; 
                   handleTextDragEnd(room.id, e);
                 }}
               />
@@ -557,7 +557,7 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
                         width={8}
                         height={8}
                         fill="rgba(255, 255, 255, 0.9)"
-                        stroke="#3E9CCB"
+                        stroke="#76C3F3"
                         strokeWidth={0.5}
                         draggable
                         onDragMove={(e) => handleVertexDragMove(e, room, idx)}
@@ -573,7 +573,7 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
             </Group>
           ))}
 
-          {/* Render the currently drawn polygon */}
+          
           {currentPoints.length > 0 && (
             <>
               <Line points={currentPoints} stroke="#3E9CCB" strokeWidth={0.5} closed={false} />
@@ -590,7 +590,7 @@ const handlePolygonClickOrEdge = (e: KonvaEventObject<MouseEvent>, room: Room) =
                     width={8}
                     height={8}
                     fill="white"
-                    stroke="#3E9CCB"
+                    stroke="#76C3F3"
                     strokeWidth={1}
                     onMouseOver={() => {
                       setHoveredVertexIndex(index);

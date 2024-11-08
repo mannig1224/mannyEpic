@@ -1,3 +1,4 @@
+import type { AppProps } from "next/app";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import TopNavbar from "../components/TopNavbar/TopNavbar"; // Import TopNavbar
@@ -44,7 +45,7 @@ export default function RootLayout({
           <TopNavbar />
           <SideNavbar />
           <div className="content"> {/* Wrapper for page-specific content */}
-            {children} {/* This renders the content of each page */}
+            {children}
           </div>
 
         </MapsProvider>
