@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faEdit, faTrashAlt, faCopy } from '@fortawesome/free-solid-svg-icons';
 import styles from './RoomsSection.module.css'; // Import the CSS module for styling
-import { useMaps, Room } from '../../context/MapsContext';
+import { useMaps, Room } from '../../../context/MapsContext';
 import Modal from '../Modal/Modal';
 
 

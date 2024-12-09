@@ -1,8 +1,8 @@
 import type { AppProps } from "next/app";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import TopNavbar from "../components/TopNavbar/TopNavbar"; // Import TopNavbar
-import SideNavbar from "../components/SideNavbar/SideNavbar"; // Import SideNavbar
+import TopNavbar from "../components/layoutComponents/TopNavbar/TopNavbar"; // Import TopNavbar
+import SideNavbar from "../components/layoutComponents/SideNavbar/SideNavbar"; // Import SideNavbar
 import "./globals.css";
 import Head from "next/head"; // Import Head component for metadata
 import { MapsProvider } from "@/context/MapsContext";

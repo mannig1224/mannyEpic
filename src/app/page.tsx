@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
-import HomeLeftSection from '../components/HomeLeftSection/HomeLeftSection'; // No need for .tsx extension
-import HomeRightSection from '../components/HomeRightSection/HomeRightSection'; // No need for .tsx extension
+import HomeLeftSection from '../components/mapPageComponents/HomeLeftSection/HomeLeftSection'; // No need for .tsx extension
+import HomeRightSection from '../components/mapPageComponents/HomeRightSection/HomeRightSection'; // No need for .tsx extension
 import styles from '../styles/Home.module.css';
 
 const Home: React.FC = () => {

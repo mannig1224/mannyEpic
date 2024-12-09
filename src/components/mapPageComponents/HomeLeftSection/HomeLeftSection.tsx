@@ -1,7 +1,7 @@
 import React from 'react';
 import MapContainer from '../MapContainer/MapContainer';
 import styles from './HomeLeftSection.module.css';
-import { useMaps } from '../../context/MapsContext';
+import { useMaps } from '../../../context/MapsContext';
 
 interface HomeLeftSectionProps {
   currentMap: string;

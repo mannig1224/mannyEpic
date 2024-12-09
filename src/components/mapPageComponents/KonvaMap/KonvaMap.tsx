@@ -3,8 +3,8 @@ import { Stage, Layer, Image as KonvaImage, Line, Rect, Group, Text } from 'reac
 import useImage from 'use-image';
 import styles from './KonvaMap.module.css'; 
 import { KonvaEventObject } from 'konva/lib/Node'; 
-import { useMaps, Room } from '../../context/MapsContext';
-import { distanceFromSegment } from '../../utils/geometryUtils';
+import { useMaps, Room } from '../../../context/MapsContext';
+import { distanceFromSegment } from '../../../utils/geometryUtils';
 
 
 

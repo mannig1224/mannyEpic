@@ -7,6 +7,7 @@ import RoomsSection from '../RoomsSection/RoomsSection';
 import ZonesSection from '../ZonesSection/ZonesSection';
 import DoorsSection from '../DoorsSection/DoorsSection';
 import SettingsSection from '../SettingsSection/SettingsSection';
+
 const HomeRightSection: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState<string>('Paging'); // State to track the selected tab
 
