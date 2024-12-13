@@ -1,0 +1,112 @@
+.mainContent {
+    margin-left: 85px; /* Adjust according to side navbar width */
+    margin-top: 70px;  /* Adjust according to top navbar height */
+    padding: 1.2rem;
+    display: flex;
+    gap: 1.2rem; /* Gap between the map and the second section */
+    flex-direction: column;
+    align-items: center;
+  }
+
+/* Navigation section */
+.navSection {
+    width: 95%;
+    height: 35%; 
+    display: flex;
+    padding-top: 20px;
+  }
+  
+  /* Options list */
+  .optionsList {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    justify-content: space-around;
+  }
+  
+  /* Option card */
+  .option {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 280px;
+    width: 300px;
+    height: 100px;
+    background: #ffffff; /* White background for cards */
+    border: 1px solid #ddd; /* Light border for card */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  /* Hover effect for option card */
+  .option:hover {
+    transform: translateY(-5px); /* Lift on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+  }
+  
+  /* Icon styles */
+  .icon {
+    min-width: 90px;
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.5rem;
+    
+    transition: transform 1s ease;
+  }
+
+  .option:hover .icon {
+    transform: rotate(360deg); /* Rotate the icon */
+    transition: transform 1.2s ease; /* Smooth rotation */
+  }
+  
+  
+  /* Individual icons with colors */
+  .iconDiscover {
+    background-color: #ffa500; /* Orange */
+  }
+  .iconAdd {
+    background-color: #28a745; /* Green */
+  }
+  .iconConfigure {
+    background-color: #007bff; /* Blue */
+  }
+  .iconReboot {
+    background-color: #17a2b8; /* Teal */
+  }
+  .iconUpdate {
+    background-color: #e83e8c; /* Pink */
+  }
+  
+  /* Text content */
+  .textContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    
+  }
+  
+  /* Title styles */
+  .title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+  }
+  
+  /* Subtitle styles */
+  .subtitle {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 0.5rem;
+  }
