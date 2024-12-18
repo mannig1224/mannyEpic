@@ -4,8 +4,9 @@ node_modules/
 client/.next/
 server/node_modules/
 client/node_modules/
+*.next/
 # Build output
-client/.next
+
 dist/
 build/
 out/
