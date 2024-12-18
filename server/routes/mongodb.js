@@ -22,14 +22,12 @@ async function connectToDatabase() {
   if (!cached.promise) {
     console.log('Connecting to MongoDB using Mongoose...');
     cached.promise = mongoose
-      .connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      })
+      .connect(uri) // Removed deprecated options
       .then((mongoose) => mongoose);
   }
 
   cached.conn = await cached.promise;
+  console.log('Connected to MongoDB successfully');
   return cached.conn;
 }
 

@@ -2,16 +2,20 @@ const express = require('express');
 const router = express.Router();
 const Device = require('../models/Device');
 
-// GET all devices
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const devices = await Device.find();
-    console.log('Fetched devices:', devices); // Log result for debugging 
-    res.json(devices);
+    const devices = await Device.find().select("-_id").lean();
+    const cleanDevices = JSON.parse(JSON.stringify(devices));
+
+    console.log("Clean Devices Sent to Client:", cleanDevices);
+    res.json(cleanDevices);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching devices', error });
+    console.error("Error fetching devices:", error);
+    res.status(500).json({ message: "Error fetching devices" });
   }
 });
+
+
 
 // POST a new device
 router.post('/', async (req, res) => {

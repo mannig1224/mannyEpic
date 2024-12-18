@@ -26,7 +26,9 @@ app.use(bodyParser.json());
 // Routes
 app.use('/api', pingRoutes);
 app.use("/api/devices", devicesRoute);
-
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Backend is connected!" });
+});
 // Start the server
 app.listen(PORT, () => {
   console.log(`Express server running on http://localhost:${PORT}`);

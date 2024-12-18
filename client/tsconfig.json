@@ -32,7 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/layoutComponents/SchoolLogo"
+    "client/src/components/layoutComponents/SchoolLogo"
   ],
   "exclude": [
     "node_modules"

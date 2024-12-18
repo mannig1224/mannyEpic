@@ -1,9 +1,35 @@
-import React from 'react';
+"use client";
+
+import React, { useState, useEffect } from "react";
 
 import styles from './devices.module.css';
 import DevicesTable from '../../components/devicesPageComponents/DevicesTable/DevicesTable';
 
+
 const Devices: React.FC = () => {
+
+
+  const [devices, setDevices] = useState<any[]>([]);
+  const [message, setMessage] = useState<string>("");
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/devices")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Received response from backend:", data); // Logs the devices
+        setDevices(data); // Set the devices state
+        setMessage("Successfully connected to backend"); // Set a success message
+      })
+      .catch((error) => {
+        console.error("Error connecting to backend:", error);
+        setMessage("Failed to connect to backend");
+      });
+  }, []);
   return (
     <div className={styles.mainContent}>
 
@@ -53,7 +79,14 @@ const Devices: React.FC = () => {
       </div>
       <main className={styles.main}>
         
-        <DevicesTable/>
+       <p>{message}</p>
+       <ul>
+        {devices.map((device, index) => (
+          <li key={index}>
+            {device.deviceName} - {device.deviceType}
+          </li>
+        ))}
+      </ul>
       </main>
     </div>
   );
