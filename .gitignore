@@ -1,4 +1,7 @@
 # Node modules
+node_modules/
+.next/
+client/.next/
 server/node_modules/
 client/node_modules/
 # Build output
