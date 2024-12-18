@@ -1,0 +1,206 @@
+/*!******************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/app/devices/devices.module.css ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************/
+.devices_mainContent__ysYzN {
+    margin-left: 85px; /* Adjust according to side navbar width */
+    margin-top: 70px;  /* Adjust according to top navbar height */
+    padding: 1.2rem;
+    display: flex;
+    gap: 1.2rem; /* Gap between the map and the second section */
+    flex-direction: column;
+    align-items: center;
+  }
+
+/* Navigation section */
+.devices_navSection__kpJYd {
+    width: 95%;
+    height: 35%; 
+    display: flex;
+    padding-top: 20px;
+  }
+  
+  /* Options list */
+  .devices_optionsList__BI5Gt {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    justify-content: space-around;
+  }
+  
+  /* Option card */
+  .devices_option__yqDYt {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 280px;
+    width: 300px;
+    height: 100px;
+    background: #ffffff; /* White background for cards */
+    border: 1px solid #ddd; /* Light border for card */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  /* Hover effect for option card */
+  .devices_option__yqDYt:hover {
+    transform: translateY(-5px); /* Lift on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+  }
+  
+  /* Icon styles */
+  .devices_icon__at5Xj {
+    min-width: 90px;
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.5rem;
+    
+    transition: transform 1s ease;
+  }
+
+  .devices_option__yqDYt:hover .devices_icon__at5Xj {
+    transform: rotate(360deg); /* Rotate the icon */
+    transition: transform 1.2s ease; /* Smooth rotation */
+  }
+  
+  
+  /* Individual icons with colors */
+  .devices_iconDiscover__G_OCd {
+    background-color: #ffa500; /* Orange */
+  }
+  .devices_iconAdd__ZNwj_ {
+    background-color: #28a745; /* Green */
+  }
+  .devices_iconConfigure__LfaBp {
+    background-color: #007bff; /* Blue */
+  }
+  .devices_iconReboot__6Nat9 {
+    background-color: #17a2b8; /* Teal */
+  }
+  .devices_iconUpdate__CCRZZ {
+    background-color: #e83e8c; /* Pink */
+  }
+  
+  /* Text content */
+  .devices_textContent__NL8Lh {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    
+  }
+  
+  /* Title styles */
+  .devices_title__VZQh6 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+  }
+  
+  /* Subtitle styles */
+  .devices_subtitle__5Robl {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 0.5rem;
+  }
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/devicesPageComponents/DevicesTable/DevicesTable.module.css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Table container */
+.DevicesTable_tableContainer___aoNc {
+    min-width: 83vw;
+    margin: 20px auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header */
+  .DevicesTable_header__lToQJ {
+    padding: 16px;
+    border-bottom: 1px solid #e0e0e0;
+    
+  }
+  
+  .DevicesTable_header__lToQJ h1 {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0;
+  }
+  
+  /* Table header */
+  .DevicesTable_tableHeader__c3d0o {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    text-align: left;
+    color: #555;
+    padding: 12px;
+    padding-left: 20px;
+  }
+  
+  /* Table rows */
+  .DevicesTable_tableRow__r7WAl {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s ease;
+    
+  }
+  
+  .DevicesTable_tableRow__r7WAl:hover {
+    background-color: #d8d8d8;
+  }
+  
+  /* Alternating row colors */
+  .DevicesTable_rowOdd__eNR9j {
+    background-color: #fafafa;
+  }
+  
+  .DevicesTable_rowEven__vBl1q {
+    background-color: #ffffff;
+  }
+  
+  /* Data cells */
+  .DevicesTable_dataCell__84KrU {
+    padding: 12px;
+    color: #333;
+    padding-left: 20px;
+  }
+  
+  /* Status cells */
+  .DevicesTable_status__aTmgR {
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  /* Action cells */
+  .DevicesTable_actionCell__FeT8l {
+    color: #007bff;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .DevicesTable_actionCell__FeT8l:hover {
+    text-decoration: underline;
+  }
+  /* Sort Icon */
+.DevicesTable_sortIcon___Y5DE {
+    fill: #ccc; /* Default color for inactive arrows */
+    transition: fill 0.3s ease;
+  }
+  
+  .DevicesTable_sortActive__FmeGy {
+    fill: #333; /* Darker color for active sorting arrow */
+  }
+  
+
+  

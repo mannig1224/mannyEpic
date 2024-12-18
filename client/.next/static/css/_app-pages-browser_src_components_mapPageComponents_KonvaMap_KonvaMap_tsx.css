@@ -1,0 +1,30 @@
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/mapPageComponents/KonvaMap/KonvaMap.module.css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************/
+/* KonvaMap.module.css */
+.KonvaMap_konvaMap__CMgZy {
+    height: 100%; /* Inherit the full height of the parent */
+    width: 100%;  /* Inherit the full width of the parent */
+    position: relative; /* Required for internal absolute positioning */
+  }
+  .KonvaMap_tooltip__3_OM6 {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    z-index: 10; /* Ensure it appears above the map */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    opacity: 0; /* Initially hidden */
+    transition: opacity 5s ease-in; /* Slow fade-in effect to make it noticeable */
+  }
+  
+  .KonvaMap_tooltip__3_OM6.KonvaMap_visible__C5pbH {
+    transition: opacity 5s ease-in;
+    opacity: 1; /* Fade in smoothly */
+  }
+  

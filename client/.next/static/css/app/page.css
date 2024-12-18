@@ -1,0 +1,1002 @@
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/mapPageComponents/MapContainer/MapContainer.module.css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+/* Styling for the map container */
+.MapContainer_mapContainer__xBX0k {
+  height: 100%; /* Ensure the map takes the full height of its container */
+  width: 100%;  /* Ensure the map takes the full width of its container */
+  min-height: 500px; /* Add a minimum height to ensure the map is visible */
+  position: relative; /* Position relative for internal absolute positioning if needed */
+  border-radius: 0 0 8px 8px; /* Rounded corners for a more modern look */
+  
+  
+  overflow: hidden; /* Prevent content from overflowing out of the container */
+  background-color: #f9fcfd; /* Optional: Light background color for visual contrast */
+}
+
+
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/mapPageComponents/HomeLeftSection/HomeLeftSection.module.css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************/
+.HomeLeftSection_mapSection__4mlQz {
+    height: 85vh;
+    width: 80vw;
+    border-radius: 8px;
+    overflow: hidden; /* Prevent content overflow */
+    position: relative;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .HomeLeftSection_mapHeader__iET6U {
+    background-color: #ffffff;
+    border-bottom: 1px solid #d1d1d1;
+    color: #000;
+    padding: 0 1rem;
+    border-radius: 8px 8px 0 0;
+    /* box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    z-index: 1000; /* Ensure the header stays on top */
+    position: relative; /* Position relative so it layers properly */
+  }
+  
+  /* Custom select dropdown container */
+  .HomeLeftSection_customSelectContainer__dEVnd {
+    position: relative;
+  }
+  
+  .HomeLeftSection_customSelect__XTMIZ {
+    appearance: none; /* Hide default dropdown */
+    width: 10rem; /* Fixed width */
+    max-width: 10rem; /* Ensure it doesn't grow beyond the container */
+    padding: 0.3rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+    background-image: none; /* Remove any default arrow */
+    
+    /* Handle long text with ellipsis */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Checkmark style for selected item */
+  .HomeLeftSection_customOption__4Srvs::before {
+    content: "✔";
+    color: #ffffff;
+    margin-right: 10px;
+    visibility: hidden; /* Hidden by default */
+  }
+  
+  .HomeLeftSection_customSelect__XTMIZ option:checked::before {
+    visibility: visible; /* Show checkmark for selected option */
+  }
+  
+  /* Style for the dropdown options */
+  .HomeLeftSection_customOption__4Srvs {
+    background-color: #fff; /* White background */
+    color: #000; /* Black text */
+    padding: 0.5rem;
+  }
+  
+  /* Add some padding to the dropdown options */
+  .HomeLeftSection_customSelect__XTMIZ option {
+    padding: 10px;
+  }
+  
+  /* Button container */
+  .HomeLeftSection_buttonContainer__T2LXm {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Space between the buttons */
+  }
+  
+/* Styling for the Page Entire School button */
+.HomeLeftSection_pageButton__XRn4I {
+    padding: 0rem 0.5rem; 
+    background-color: rgba(var(--primary-color-rgb, 246, 130, 32), 0.8); /* Darker orange for active items */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    line-height: 1;
+    height: 38px;
+    
+}
+
+.HomeLeftSection_pageButton__XRn4I:hover {
+  background-color: rgba(var(--primary-color-rgb, 246, 130, 32), 1); /* Darker orange for active items */ /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly enlarge button on hover */
+}
+  
+  
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/mapPageComponents/HomeRightSection/HomeRightSection.module.css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************/
+.HomeRightSection_rightSection__UMNGr {
+    height: 85vh;
+    width: 450px;
+    background-color: #e0e0e0; /* Gray background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    /* border: 1px solid #ccc; /* Light border */
+    display: flex;
+    flex-direction: column;
+  }
+  
+.HomeRightSection_navbar__YagE5 {
+    display: flex; /* Makes the navbar items horizontal */
+    height: 60px;
+    align-items: center;
+    padding: 6px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd; /* Add a bottom border to resemble tabs */
+    border-radius: 8px 0 0; /* Rounded corners */
+    border-bottom: 1px solid #d1d1d1;
+  }
+  .HomeRightSection_navbar__YagE5 ul {
+    display: flex; /* Ensure ul contents are laid out horizontally */
+    list-style-type: none; /* Remove bullet points */
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    width: 100%;
+    
+  }
+  
+  /* Each tab button */
+  .HomeRightSection_navItem__R21ay {
+    display: flex;
+    flex-direction: column; /* Makes the icon sit on top of the text */
+    align-items: center; /* Center the icon and text */
+    
+    border: none; /* No button border */
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+  }
+  /* Active tab style */
+  .HomeRightSection_active__YRUZN {
+    background-color: rgba(var(--primary-color-rgb, 246, 130, 32), 0.4); 
+      border-bottom: 3px solid var(--primary-color);; /* Active border color */
+    }
+  /* Tab hover effect */
+  .HomeRightSection_navItem__R21ay:hover {
+    background-color: rgba(var(--primary-color-rgb, 246, 130, 32), 0.1); 
+    border-bottom: 2px solid var(--primary-color); /* Emphasize the active tab on hover */
+  }
+/* Prevent hover effect on active items */
+.HomeRightSection_active__YRUZN:hover {
+  background-color: rgba(var(--primary-color-rgb, 246, 130, 32), 0.4); /* Ensure the active background remains */
+  border-bottom: 3px solid var(--primary-color); /* Ensure the active border stays */
+}
+  
+  /* Style for the icons */
+  .HomeRightSection_icon__tddGw {
+    font-size: 24px; /* Size of the icon */
+    margin-bottom: 5px; /* Space between the icon and text */
+  }
+  
+  /* Style for the text below the icon */
+  .HomeRightSection_navItem__R21ay span {
+    font-size: 12px; /* Smaller font for the text */
+    margin-top: 5px;
+    color: #666;
+  }
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/mapPageComponents/PagingIntercomSection/PagingIntercomSection.module.css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Container for the paging/intercom section */
+.PagingIntercomSection_pagingIntercomContainer__bOVlq {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9fcfd; /* Optional: Light background color for visual contrast */
+    border-radius: 0 0 8px 8px; /* Rounded corners for a more modern look */
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Wrapper for search input and icon */
+  .PagingIntercomSection_searchWrapper__53xQv {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Styling for the search input */
+  .PagingIntercomSection_searchInput__4myAE {
+    padding: 10px 40px 10px 10px; /* Space for the search icon */
+    border: none;
+    border-bottom: 1px solid #ddd; /* Bottom border */
+    font-size: 16px;
+    color: #aaa;
+    outline: none;
+    width: 100%;
+    background-color: transparent;
+  }
+  
+  /* Search icon styling */
+  .PagingIntercomSection_searchIcon___ZBHb {
+    position: absolute;
+    right: 10px; /* Position the icon inside the input box */
+    color: #aaa; /* Match the icon color with the input placeholder color */
+    font-size: 18px;
+  }
+  
+  /* Container for the room/zone selection */
+  .PagingIntercomSection_selectionContainer__zsfZg {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Label for the dropdown */
+  .PagingIntercomSection_selectLabel__i5il4 {
+    font-size: 14px;
+    color: #666; /* Subtle gray text color */
+    margin-bottom: 5px;
+  }
+  
+  /* Styling for the dropdown */
+  .PagingIntercomSection_roomSelect__5_Jk8 {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f8f9fa; /* Light background similar to image */
+    color: #555;
+    appearance: none; /* Remove the default dropdown arrow */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="292.4" height="292.4" viewBox="0 0 292.4 292.4"><path fill="%23666" d="M287 69.2c7.6-7.6 7.6-19.9 0-27.5L263.7 18.4c-7.6-7.6-19.9-7.6-27.5 0L146.2 108.4 55.1 18.4C47.5 10.8 35.2 10.8 27.5 18.4L5.1 41.7c-7.6 7.6-7.6 19.9 0 27.5L134.9 198.9c7.6 7.6 19.9 7.6 27.5 0L287 69.2z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  /* Scrollable list container for rooms/zones */
+  .PagingIntercomSection_scrollableList__JxrQm {
+    height: 45vh; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable scrolling if the list exceeds the max height */
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  /* Styling for each list item (room/zone) */
+  .PagingIntercomSection_listItem__bRYh7 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f0f4fb;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #1a3c7f;
+    transition: background-color 0.2s ease;
+    font-weight: 600; /* Semi-bold font weight */
+    font-size: 1rem; /* Font size similar to the example */
+  }
+  
+  /* Hover effect for list items */
+  .PagingIntercomSection_listItem__bRYh7:hover {
+    background-color: #e3ebf6;
+  }
+  
+  /* Styling for the selected list item */
+  .PagingIntercomSection_selected__1fbVT {
+    background-color: #e0ebf8; /* Light blue background for selected item */
+  }
+  
+  /* Check icon styling */
+  .PagingIntercomSection_checkIcon__mrgqQ {
+    color: #0066cc; /* Blue color for the checkmark */
+    font-size: 20px;
+  }
+  
+  /* Styling when no items are found */
+  .PagingIntercomSection_noItems__ShY3r {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  /* Button container for clear and paging buttons */
+.PagingIntercomSection_buttonContainer__ynOg9 {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Add a small gap between the buttons */
+    margin-top: 5px;
+  }
+  
+  /* Clear selection button styling */
+  .PagingIntercomSection_clearButton__ClDPH {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+  }
+  
+  /* Start paging button styling */
+  .PagingIntercomSection_pagingButton___k2Tx {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #0066cc;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+  }
+  
+  .PagingIntercomSection_clearButton__ClDPH:hover {
+    background-color: #f0f4fb;
+  }
+  
+  .PagingIntercomSection_pagingButton___k2Tx:hover {
+    background-color: #004c99;
+  }
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/mapPageComponents/RoomsSection/RoomsSection.module.css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Container for the rooms section */
+.RoomsSection_roomsContainer__twbB0 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9fcfd; /* Optional: Light background color for visual contrast */
+    border-radius: 0 0 8px 8px; /* Rounded corners for a more modern look */
+    width: 100%;
+    height: 100%;
+    
+  }
+
+  /* Wrapper for search input and icon */
+  .RoomsSection_searchWrapper__Fekek {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Styling for the search input */
+  .RoomsSection_searchInput__uQKd5 {
+    padding: 10px 40px 10px 10px; /* Space for the search icon */
+    border: none;
+    border-bottom: 1px solid #ddd; /* Bottom border */
+    font-size: 16px;
+    color: #aaa;
+    outline: none;
+    width: 100%;
+    background-color: transparent;
+  }
+  
+  /* Search icon styling */
+  .RoomsSection_searchIcon__ZyIj_ {
+    position: absolute;
+    right: 10px; /* Position the icon inside the input box */
+    color: #aaa; /* Match the icon color with the input placeholder color */
+    font-size: 18px;
+  }
+  
+  /* Scrollable list container for rooms */
+  .RoomsSection_scrollableList__k_qzc {
+    height: 450px; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable scrolling if the list exceeds the max height */
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  /* Styling for each list item (room) */
+  .RoomsSection_listItem__CKuu7 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f0f4fb;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #1a3c7f;
+    transition: background-color 0.2s ease;
+    font-weight: 600; /* Semi-bold font weight */
+    font-size: 1rem; /* Font size similar to the example */
+  }
+  
+  /* Hover effect for list items */
+  .RoomsSection_listItem__CKuu7:hover {
+    background-color: #e3ebf6;
+  }
+  /* Actions container (Edit and Delete icons) */
+.RoomsSection_actions__1qX1S {
+    display: flex;
+    gap: 10px; /* Space between icons */
+  }
+  
+  /* Edit icon styling */
+  .RoomsSection_editIcon__5QssN {
+    color: #007bff; /* Blue color for edit */
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .RoomsSection_editIcon__5QssN:hover {
+    color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Delete icon styling */
+  .RoomsSection_deleteIcon__KX_uw {
+    color: #dc3545; /* Red color for delete */
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .RoomsSection_deleteIcon__KX_uw:hover {
+    color: #a71d2a; /* Darker red on hover */
+  }
+  /* Styling for the selected list item */
+  .RoomsSection_selected__BkNUR {
+    background-color: #e0ebf8; /* Light blue background for selected item */
+  }
+  
+  /* Check icon styling */
+  .RoomsSection_checkIcon__Kc0Q3 {
+    color: #0066cc; /* Blue color for the checkmark */
+    font-size: 20px;
+  }
+  
+  /* Button container for clear and add buttons */
+  .RoomsSection_buttonContainer__MJ2b0 {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px; /* Space between buttons */
+  }
+  
+  /* Add room button styling */
+  .RoomsSection_addButton__oJ50b {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #0066cc;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+  }
+  
+  .RoomsSection_addButton__oJ50b:hover {
+    background-color: #004c99;
+  }
+  
+  .RoomsSection_drawingMode__ncQAx {
+    background-color: #28a745; /* Green color for drawing mode */
+    color: #fff; /* White text */
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.7); /* Green glowing effect */
+    animation: RoomsSection_pulseGreen__JBph_ 1.5s infinite; /* Pulse animation */
+  }
+  /* Prevent hover effect when in drawing mode */
+  .RoomsSection_drawingMode__ncQAx:hover {
+    background-color: #34d058ff; /* Maintain same green color */
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.7); /* Maintain glowing effect */
+  }
+  /* Keyframes for green pulse animation */
+  @keyframes RoomsSection_pulseGreen__JBph_ {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 20px rgba(40, 167, 69, 0.7);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(40, 167, 69, 0.9);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 20px rgba(40, 167, 69, 0.7);
+    }
+  }
+
+  /* Styles for the input fields inside the modal */
+
+.RoomsSection_inputWrapper__pmOBt {
+  margin-bottom: 16px;
+}
+
+.RoomsSection_inputLabel__kG23W {
+  display: block;
+  font-weight: 500;
+  color: #8a8a8a;
+  margin-bottom: 6px;
+}
+
+.RoomsSection_inputField__Mc1zx {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #333;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.RoomsSection_inputField__Mc1zx:focus {
+  border-color: #4e88ff;
+  box-shadow: 0px 4px 10px rgba(78, 136, 255, 0.2);
+}
+
+.RoomsSection_inputField__Mc1zx:disabled {
+  background: #f9f9f9;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/mapPageComponents/Modal/Modal.module.css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************/
+.Modal_modalOverlay__hppzY {
+  position: fixed;
+  inset: 0; /* Shorthand for top, right, bottom, left set to 0 */
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.Modal_modal__4ICOR {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 450px;
+  max-width: 95%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+}
+
+.Modal_modal__4ICOR h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #3C4A5D;
+}
+
+.Modal_modalContent__wyu1U {
+  margin-bottom: 20px;
+}
+
+.Modal_modalActions__YZ1c_ {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* Provides space between buttons */
+}
+
+.Modal_modal__4ICOR button {
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 1rem;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.Modal_closeButton__6E0dT {
+  background: #e0e0e0;
+  color: #222;
+}
+
+.Modal_closeButton__6E0dT:hover {
+  background: #d4d4d4;
+}
+
+.Modal_confirmButton__2hihJ {
+  background: #4c4cff;
+  color: #ffffff;
+}
+
+.Modal_confirmButton__2hihJ:hover {
+  background: #3b3bff;
+}
+
+.Modal_iconWrapper__TC2LK {
+  background: #f0f0f0;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.Modal_iconWrapper__TC2LK img {
+  width: 24px;
+  height: 24px;
+}
+
+
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/mapPageComponents/ZonesSection/ZonesSection.module.css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Container for the zones section */
+.ZonesSection_zonesContainer__WEpHm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9fcfd; /* Optional: Light background color for visual contrast */
+    border-radius: 0 0 8px 8px; /* Rounded corners for a more modern look */
+    width: 100%;
+    height: 100%;
+    
+    
+  }
+  
+  /* Wrapper for search input and icon */
+  .ZonesSection_searchWrapper__Le9lZ {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Styling for the search input */
+  .ZonesSection_searchInput__UlbMM {
+    padding: 10px 40px 10px 10px; /* Space for the search icon */
+    border: none;
+    border-bottom: 1px solid #ddd; /* Bottom border */
+    font-size: 16px;
+    color: #aaa;
+    outline: none;
+    width: 100%;
+    background-color: transparent;
+  }
+  
+  /* Search icon styling */
+  .ZonesSection_searchIcon__MQDkx {
+    position: absolute;
+    right: 10px; /* Position the icon inside the input box */
+    color: #aaa; /* Match the icon color with the input placeholder color */
+    font-size: 18px;
+  }
+  
+  /* Scrollable list container for zones */
+  .ZonesSection_scrollableList__X_5nP {
+    
+    overflow-y: auto; /* Enable scrolling if the list exceeds the max height */
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+    height: 450px;
+  }
+  
+  /* Styling for each list item (zone) */
+  .ZonesSection_listItem__1bkmL {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f0f4fb;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #1a3c7f;
+    transition: background-color 0.2s ease;
+    font-weight: 600; /* Semi-bold font weight */
+    font-size: 1rem; /* Font size similar to the example */
+  }
+  
+  /* Hover effect for list items */
+  .ZonesSection_listItem__1bkmL:hover {
+    background-color: #e3ebf6;
+  }
+  
+  /* Actions container (Edit and Delete icons) */
+  .ZonesSection_actions__XI_rI {
+    display: flex;
+    gap: 10px; /* Space between icons */
+  }
+  
+  /* Edit icon styling */
+  .ZonesSection_editIcon___s3oM {
+    color: #007bff; /* Blue color for edit */
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .ZonesSection_editIcon___s3oM:hover {
+    color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Delete icon styling */
+  .ZonesSection_deleteIcon__LK0_0 {
+    color: #dc3545; /* Red color for delete */
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .ZonesSection_deleteIcon__LK0_0:hover {
+    color: #a71d2a; /* Darker red on hover */
+  }
+  
+  /* Button container for add zone button */
+  .ZonesSection_buttonContainer__YeEWm {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px; /* Space between buttons */
+  }
+  
+  /* Add zone button styling */
+  .ZonesSection_addButton__HeBmp {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #0066cc;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+  }
+  
+  .ZonesSection_addButton__HeBmp:hover {
+    background-color: #004c99;
+  }
+  
+  /* Styling when no items are found */
+  .ZonesSection_noItems__iPkHK {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding: 10px;
+  }
+  
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/mapPageComponents/DoorsSection/DoorsSection.module.css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Container for the doors section */
+.DoorsSection_doorsContainer__mVNgb {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9fcfd; /* Optional: Light background color for visual contrast */
+    border-radius: 0 0 8px 8px; /* Rounded corners for a more modern look */
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Wrapper for search input and icon */
+  .DoorsSection_searchWrapper__L0uUB {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Styling for the search input */
+  .DoorsSection_searchInput__GNxZ4 {
+    padding: 10px 40px 10px 10px; /* Space for the search icon */
+    border: none;
+    border-bottom: 1px solid #ddd; /* Bottom border */
+    font-size: 16px;
+    color: #aaa;
+    outline: none;
+    width: 100%;
+    background-color: transparent;
+  }
+  
+  /* Search icon styling */
+  .DoorsSection_searchIcon__MlH8X {
+    position: absolute;
+    right: 10px; /* Position the icon inside the input box */
+    color: #aaa; /* Match the icon color with the input placeholder color */
+    font-size: 18px;
+  }
+  
+  /* Scrollable list container for doors */
+  .DoorsSection_scrollableList__sdqAI {
+    overflow-y: auto; /* Enable scrolling if the list exceeds the max height */
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+    height: 450px;
+  }
+  
+  /* Styling for each list item (door) */
+  .DoorsSection_listItem__WmwrS {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f0f4fb;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #1a3c7f;
+    transition: background-color 0.2s ease;
+    font-weight: 600; /* Semi-bold font weight */
+    font-size: 1rem; /* Font size similar to the example */
+  }
+  
+  /* Hover effect for list items */
+  .DoorsSection_listItem__WmwrS:hover {
+    background-color: #e3ebf6;
+  }
+  
+  /* Actions container (Edit and Delete icons) */
+  .DoorsSection_actions__fLJpJ {
+    display: flex;
+    gap: 10px; /* Space between icons */
+  }
+  
+  /* Edit icon styling */
+  .DoorsSection_editIcon__eQJS2 {
+    color: #007bff; /* Blue color for edit */
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .DoorsSection_editIcon__eQJS2:hover {
+    color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Delete icon styling */
+  .DoorsSection_deleteIcon__B7Kuf {
+    color: #dc3545; /* Red color for delete */
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .DoorsSection_deleteIcon__B7Kuf:hover {
+    color: #a71d2a; /* Darker red on hover */
+  }
+  
+  /* Button container for add door button */
+  .DoorsSection_buttonContainer__NHdkk {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px; /* Space between buttons */
+  }
+  
+  /* Add door button styling */
+  .DoorsSection_addButton__sFi2q {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #0066cc;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+  }
+  
+  .DoorsSection_addButton__sFi2q:hover {
+    background-color: #004c99;
+  }
+  
+  /* Styling when no items are found */
+  .DoorsSection_noItems__DbV5N {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding: 10px;
+  }
+  
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/mapPageComponents/SettingsSection/SettingsSection.module.css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* Container for the settings section */
+.SettingsSection_settingsContainer__WvQev {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9fcfd; /* Optional: Light background color for visual contrast */
+    border-radius: 0 0 8px 8px; /* Rounded corners for a more modern look */
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Container for the color picker */
+  .SettingsSection_colorPickerContainer__9F9U1 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Label for the color picker */
+  .SettingsSection_selectLabel__X216P {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color, #666); /* Use global variable for text color */
+    margin-bottom: 5px;
+    text-align: left;
+  }
+  
+  /* Wrapper for color picker and preview */
+  .SettingsSection_pickerWrapper__0GGbP {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between color picker and preview */
+  }
+  
+  /* Styling for the color picker */
+  .SettingsSection_colorPicker__YmM0G {
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .SettingsSection_colorPicker__YmM0G:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Styling for the color preview box */
+  .SettingsSection_colorPreview__YyQJk {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Button container for any future buttons */
+  .SettingsSection_buttonContainer__PeXZu {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px; /* Space between buttons */
+  }
+  
+/*!**********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/styles/Home.module.css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************/
+/* Home.module.css */
+.Home_mainContent__nJQdL {
+  margin-left: 85px; /* Adjust according to side navbar width */
+  margin-top: 70px;  /* Adjust according to top navbar height */
+  padding: 1.2rem;
+  display: flex;
+  gap: 1.2rem; /* Gap between the map and the second section */
+  
+}
+
+
+
+
+
+

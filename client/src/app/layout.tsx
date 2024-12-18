@@ -1,12 +1,14 @@
+
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import TopNavbar from "../components/layoutComponents/TopNavbar/TopNavbar"; // Import TopNavbar
 import SideNavbar from "../components/layoutComponents/SideNavbar/SideNavbar"; // Import SideNavbar
 import "../../globals.css";
 import { MapsProvider } from "../context/MapsContext";
-//import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-//const queryClient = new QueryClient();
+// const queryClient = new QueryClient();
 
 const geistSans = localFont({
   src: "/fonts/GeistVF.woff", // Absolute path for fonts in 'public'

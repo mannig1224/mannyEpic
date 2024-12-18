@@ -17,6 +17,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import styles from "./DevicesTable.module.css";
 
+
+
 // Define TypeScript interface for device data
 interface Device {
   deviceName: string;
@@ -36,12 +38,10 @@ const fetchDevices = async (): Promise<Device[]> => {
     throw new Error("Failed to fetch devices");
   }
 
-  const data = await res.text(); // Fetch as string
-  const parsedData = JSON.parse(data); // Parse the string back to JSON
+  const devices = await res.json(); 
+  // 'devices' should now be a plain array of objects since you used `lean()` on your backend and returned `res.json(cleanDevices)`
 
-  console.log("Parsed Data:", parsedData);
-
-  return parsedData.map((device: any) => ({
+  return devices.map((device: any) => ({
     deviceName: String(device.deviceName),
     deviceType: String(device.deviceType),
     status: String(device.status),
@@ -53,6 +53,7 @@ const fetchDevices = async (): Promise<Device[]> => {
 };
 
 
+
 const DevicesTable: React.FC = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -61,7 +62,7 @@ const DevicesTable: React.FC = () => {
 
   // Fetch data with React Query
   const { data: devicesData, isLoading, isError, error } = useQuery({
-    queryKey: ["devices"],
+    queryKey: [],
     queryFn: fetchDevices,
   });
 
