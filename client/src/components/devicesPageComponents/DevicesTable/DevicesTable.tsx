@@ -62,8 +62,9 @@ const DevicesTable: React.FC = () => {
 
   // Fetch data with React Query
   const { data: devicesData, isLoading, isError, error } = useQuery({
-    queryKey: [],
+    queryKey: ['devices'],   // Make sure to use a stable queryKey
     queryFn: fetchDevices,
+    refetchInterval: 5000,    // Refetch every 5 seconds
   });
 
   console.log("Devices Data:", devicesData);
@@ -145,7 +146,16 @@ const DevicesTable: React.FC = () => {
             >
               <TableCell>{device.deviceName}</TableCell>
               <TableCell>{device.deviceType}</TableCell>
-              <TableCell>{device.status}</TableCell>
+              <TableCell>
+                <span
+                  style={{
+                  display: 'inline-block',
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  backgroundColor: device.status === 'Alive' ? 'green' : 'red',
+                  marginRight: '8px',
+                  }}></span>{device.status}</TableCell>
               <TableCell>{device.IP}</TableCell>
               <TableCell>{device.MAC}</TableCell>
               <TableCell>{device.extension}</TableCell>

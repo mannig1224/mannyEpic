@@ -2,8 +2,10 @@ const express = require('express');
 const devicesRoute = require("./routes/devices");
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const pingRoutes = require('./routes/pingRoutes');
+const pingAllDevices = require('./routes/pingRoutes');
 const connectToDatabase = require('./routes/mongodb');
+
+require('./cron/pingCron');
 
 const app = express();
 const PORT = 5000; // Choose a port for your backend
@@ -24,7 +26,7 @@ app.use(bodyParser.json());
 
 
 // Routes
-app.use('/api', pingRoutes);
+app.use('/api/pingAllDevices', pingAllDevices);
 app.use("/api/devices", devicesRoute);
 app.get("/api/test", (req, res) => {
   res.json({ message: "Backend is connected!" });

@@ -1,29 +1,43 @@
 const express = require('express');
 const ping = require('ping');
 const router = express.Router();
+const Device = require('../models/Device'); // Make sure this path is correct
 
-// Ping API Route
-router.post('/ping', async (req, res) => {
-  const { ipRange } = req.body;
+// Route to ping all devices and update their statuses
+router.get('/', async (req, res) => {
+  try {
+    // Fetch all devices from the database
+    const devices = await Device.find({});
 
-  console.log('Received IP Range:', ipRange);
-
-  if (!ipRange || !Array.isArray(ipRange)) {
-    return res.status(400).json({ error: "Invalid or missing 'ipRange' parameter" });
-  }
-
-  const results = {};
-
-  for (const ip of ipRange) {
-    try {
-      const response = await ping.promise.probe(ip);
-      results[ip] = response.alive ? 'Alive' : 'Unreachable';
-    } catch (err) {
-      results[ip] = 'Error';
+    // If no devices found, send an appropriate response
+    if (!devices.length) {
+      return res.status(404).json({ message: 'No devices found' });
     }
-  }
 
-  res.json(results);
+    const pingResults = {};
+
+    // Create an array of promises, each promise pings a device and updates its status.
+    const pingPromises = devices.map(async (device) => {
+      const response = await ping.promise.probe(device.IP);
+      const newStatus = response.alive ? 'Alive' : 'Unreachable';
+
+      // Update the device in the database
+      await Device.findByIdAndUpdate(device._id, { status: newStatus }, { new: true });
+
+      // Store result
+      pingResults[device.IP] = newStatus;
+    });
+
+    // Wait for all pings and updates to complete
+    await Promise.all(pingPromises);
+
+    // Return a summary of the ping results
+    res.json({ message: 'All device statuses updated', pingResults });
+
+  } catch (error) {
+    console.error('Error pinging devices:', error);
+    res.status(500).json({ error: 'Failed to ping and update devices' });
+  }
 });
 
 module.exports = router;
