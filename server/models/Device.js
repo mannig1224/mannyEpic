@@ -7,7 +7,6 @@ const deviceSchema = new mongoose.Schema({
   IP: { type: String, required: true },
   MAC: { type: String, required: true },
   extension: { type: String, required: true },
-  action: { type: String, required: true },
 }, { collection: 'devices' });
 
 const Device = mongoose.model('Device', deviceSchema);
