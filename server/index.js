@@ -3,6 +3,7 @@ const devicesRoute = require("./routes/devices");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const pingAllDevices = require('./routes/pingRoutes');
+const playBell = require('./routes/playBell')
 const connectToDatabase = require('./routes/mongodb');
 
 require('./cron/pingCron');
@@ -28,6 +29,7 @@ app.use(bodyParser.json());
 // Routes
 app.use('/api/pingAllDevices', pingAllDevices);
 app.use("/api/devices", devicesRoute);
+app.use("/api/playBell", playBell);
 app.get("/api/test", (req, res) => {
   res.json({ message: "Backend is connected!" });
 });
